@@ -1,6 +1,12 @@
-# vue-tutorial
-
+# Resource Scheduler (a project to get familiar with Vue.Js)
 > Learn Vue the hard way
+
+A simple REST-Backend writtein in go (golang) and a MongoDB database (currently not integrated)
+A web-client written in Vue.JS with Bulma.css-Framework
+
+## Screenshot of Home
+
+![Screenshot of Home](screenshot.png)
 
 ## Build Setup
 

@@ -3,14 +3,15 @@
     <article class="media">
       <div class="media-left">
         <figure class="image is-128x128">
-          <img :src="resource.url" alt="Image">
+          <img :src="event.resource.url" alt="Image">
         </figure>
       </div>
       <div class="media-content">
-        <p class="title is-4">{{resource.name}}</p>
+        <p class="title is-4">{{event.resource.name}}</p>
+        <p class="subtitle is-6">@{{event.user.username}}</p>
         <div class="content">
           <p>
-            {{resource.description}}
+            {{event.description}}
           </p>
         </div>
       </div>
@@ -20,8 +21,8 @@
 
 <script>
   export default {
-    name: 'resource-box',
-    props: ['resource']
+    name: 'event-box',
+    props: ['event']
   }
 
 </script>

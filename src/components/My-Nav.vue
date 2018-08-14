@@ -27,6 +27,16 @@
           About
         </router-link>
       </div>
+      <div class="navbar-item is-hoverable" @click="isActive = false">
+        <router-link class="navbar-link" :to="'/login'" >
+          Login
+        </router-link>
+      </div>
+      <div class="navbar-item is-hoverable" @click="isActive = false">
+        <router-link class="navbar-link" :to="'/register'" >
+          Register
+        </router-link>
+      </div>
     </div>
   </div>
   </nav>

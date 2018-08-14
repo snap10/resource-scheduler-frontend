@@ -1,6 +1,6 @@
 <template>
-  <div id="app" class="container">
-      <my-nav></my-nav>
+  <div id="app" >
+      <my-nav  v-if="!(['Login','Register'].indexOf($route.name)>-1)"></my-nav>
       <router-view></router-view>
   </div>
 </template>
