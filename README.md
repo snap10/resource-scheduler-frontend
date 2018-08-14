@@ -1,7 +1,7 @@
 # Resource Scheduler (a project to get familiar with Vue.Js)
 > Learn Vue the hard way
 
-A simple REST-Backend writtein in go (golang) and a MongoDB database (currently not integrated)
+A simple REST-Backend writtein in go (golang) and a MongoDB database (currently not integrated) (See at https://github.com/snap10/resource-scheduler)
 A web-client written in Vue.JS with Bulma.css-Framework
 
 ## Screenshot of Home
