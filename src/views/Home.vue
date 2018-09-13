@@ -1,24 +1,22 @@
 <template>
   <div class="home container">
-     <vue-event-calendar :events="demoEvents">
-      <template scope="props">
-        <div v-for="(event, index) in props.showEvents" class="event-item">
-          <!-- In here do whatever you want, make you owner event template -->
-          <event-box
-          :event="event">
-          </event-box>
-        </div>
-      </template>
-    </vue-event-calendar>
+    <div class="columns">
+      <div class="column">
+        <calendar></calendar>
+      </div>
+      <div class="column"></div>
+        <div id="upcoming-reservations"></div>
+    </div>
   </div>
 </template>
 
 <script>
+import Calendar from './../components/Calendar'
 import ResourceList from './../components/Resource-List.vue'
 import EventBox from './../components/Event-Box.vue'
 export default {
   name: 'home',
-  components: { ResourceList, EventBox },
+  components: { Calendar,ResourceList, EventBox },
   data () {
     return {
       demoEvents: [{

@@ -1,0 +1,48 @@
+stages:
+  - build
+  - test
+  - bake
+  - deploy
+
+
+build:
+  stage: build
+  image: node:9
+  script:
+    - npm install --progress=false
+    - npm run build
+  artifacts:
+    paths:
+      - dist
+#
+#test:
+#  image: node:6
+#  stage: test
+#  script:
+#    - npm install --progress=false
+#    - npm run test
+
+bake:
+  image: docker:latest
+  services:
+  - docker:dind
+  stage: bake
+  dependencies:
+  - build
+  script:
+    - chmod +x .ci/run_bake.sh 
+    - .ci/run_bake.sh
+
+deploy:
+  stage: deploy
+  environment:
+      name: integration
+      url: https://rancher.birk-home.de:9000/
+  image: cdrx/rancher-gitlab-deploy
+  only:
+    - master
+  script:
+    - export RANCHER_URL=$CATTLE_API
+    - export RANCHER_ACCESS_KEY=$CATTLE_ACCESS_KEY
+    - export RANCHER_SECRET_KEY=$CATTLE_SECRET_KEY
+    - upgrade --environment Default --start-before-stopping --stack nynm --service nynm-webfrontend --new-image $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA  --wait-for-upgrade-to-finish

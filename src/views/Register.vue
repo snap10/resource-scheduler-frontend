@@ -11,7 +11,7 @@
               <div class="field">
                 <label class="label" for="email">Email</label>
                 <p :class="{ 'control': true }">
-                    <input v-validate="'required|email'"class="is-large" :class="{'input': true, 'is-danger': errors.has('email') }" name="email" type="email" placeholder="Email" v-model="email">
+                    <input v-validate="'required|email'" class="is-large" :class="{'input': true, 'is-danger': errors.has('email') }" name="email" type="email" placeholder="Email" v-model="email">
                     <span v-show="errors.has('email')" class="help is-danger">{{ errors.first('email') }}</span>
                 </p>
               </div>
@@ -47,7 +47,8 @@
  </template>
 
  <script>
-  import {client} from '../utils/axiosUtils'
+ /* eslint-disable */
+  import client from '../utils/axiosUtils'
   export default {
     name: 'register',
     data () {

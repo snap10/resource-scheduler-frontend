@@ -1,19 +1,19 @@
 <template>
 <div class="resources">
   <ul>
-    <li v-for="resource in resources">
-      <router-link :to="{name: 'Resource', params: {id: resource.id}}"><resource-box :resource="resource"></resource-box></router-link>
+    <li :key="index" v-for="(resource,index) in resources">
+      <router-link :to="{name: 'Resource', params: {id: resource.id}}"><resource-card :resource="resource"></resource-card></router-link>
     </li>
   </ul>
 </div>
 </template>
 
 <script>
-  import ResourceBox from './Resource-Box.vue'
+  import ResourceCard from './Resource-Card.vue'
   export default {
     name: 'resource-list',
     props: ['resources'],
-    components: { ResourceBox },
+    components: { ResourceCard },
     data () {
       return {}
     }

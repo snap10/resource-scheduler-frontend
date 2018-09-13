@@ -1,7 +1,7 @@
 import axios from 'axios'
-import store from '../store'
+import {store} from '../vuex/store'
 
-export const client = () => {
+export default () => {
   const defaultOptions = {
     baseURL: `http://localhost/api/`,
     headers: {

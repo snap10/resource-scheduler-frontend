@@ -18,8 +18,8 @@
     </div>
   </div>
   <vue-event-calendar :events="demoEvents">
-      <template scope="props">
-        <div v-for="(event, index) in props.showEvents" class="event-item">
+      <template slot-scope="props">
+        <div :key="index" v-for="(event, index) in props.showEvents" class="event-item">
           <!-- In here do whatever you want, make you owner event template -->
           {{event}}
         </div>
