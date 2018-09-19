@@ -7,21 +7,34 @@
 </template>
 
 <script>
+var jwtDecode = require('jwt-decode')
 import MyNav from './components/My-Nav.vue'
 import Loader from './components/Loader.vue'
 export default {
   name: 'app',
   components: { MyNav, Loader },
+  created(){
+    var currentString = localStorage.getItem('currentuser')
+    var currentUser = (currentString)?JSON.parse(currentString):null
+    if(currentUser){
+      this.$store.commit('setCurrentUser',currentUser)
+    }
+  },
   computed: {
     setupFinished() {
-        return (this.$store.getters.tokenPresent!==null)
-      
+        if(!(['Login','Register'].indexOf(this.$route.name)>-1)&&!this.$store.getters.isLoggedIn){
+          this.$router.push({name:"Login"})
+        }
+        return true
     }
   }
 }
 </script>
 
 <style>
+  .brand-name{
+    font-family: "Comic Sans MS", cursive, sans-serif
+  }
 fieldset, label { margin: 0; padding: 0; border:none; }
 .bodyFixed {
   position: fixed;
@@ -31,8 +44,7 @@ fieldset, label { margin: 0; padding: 0; border:none; }
 .has-navbar-fixed-top {
   margin-top: 3.5rem;
 }
-
-.is-half {
+.is-half{
   width: 50%;
 }
 .center {
@@ -43,7 +55,7 @@ fieldset, label { margin: 0; padding: 0; border:none; }
   overflow-y: scroll;
 }
 .fullscreen{
-  height: calc(100vh - 3.25rem);
+  height: calc(100vh - 3.5rem);
   position: relative;
 }
 .scrollx {
@@ -55,12 +67,12 @@ fieldset, label { margin: 0; padding: 0; border:none; }
 .height-5{
   height: 5rem;
 }
-.height-0 {
-    height:0;
-  }
-.height-1 {
-    height: 1rem;
-  }
+.height-0{
+  height:0;
+}
+.height-1{
+  height: 1rem;
+}
 .height-100p{
   height: 100%;
 }
@@ -115,6 +127,5 @@ fieldset, label { margin: 0; padding: 0; border:none; }
   right: 0;
   top: 3.25rem;
 }
-  
 }
 </style>

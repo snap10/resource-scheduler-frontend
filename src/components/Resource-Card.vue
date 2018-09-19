@@ -1,49 +1,38 @@
 <template>
-  <div class="resource-card">
+<div class="card">
   <div class="card-image">
-    <figure class="image">
-      <img :src="resourceForCard.url" alt="Image">
+    <figure class="image is-4by3">
+           <img :src="resourceForCard.main_picture_url" alt="Image">
     </figure>
   </div>
   <div class="card-content">
     <div class="media">
       <div class="media-content">
         <p class="title is-4">{{resourceForCard.name}}</p>
-        <p class="subtitle is-6">@TODO</p>
+        <p class="subtitle is-6">Verantwortlich: {{resourceForCard.responsible_person}}</p>
+      </div>
+      <div class="media-right">
+        <a href="">
+          <span class="is-invisible icon"><i class="fas fa-ellipsis-v has-text-grey"></i></span>
+        </a>
       </div>
     </div>
-
     <div class="content">
-     {{resourceForCard.description}}
+      <p class="subtitle is-7">Nächste Reservierungen</p>
+      <ul>
+      <li><time datetime="2016-1-1">11:09 PM - 1 Jan 2019</time></li>
+      <li><time datetime="2016-1-1">11:09 PM - 1 Jan 2019</time></li>
+      <li><time datetime="2016-1-1">11:09 PM - 1 Jan 2019</time></li>
+      </ul>
     </div>
   </div>
-  <vue-event-calendar :events="demoEvents">
-      <template slot-scope="props">
-        <div :key="index" v-for="(event, index) in props.showEvents" class="event-item">
-          <!-- In here do whatever you want, make you owner event template -->
-          {{event}}
-        </div>
-      </template>
-    </vue-event-calendar>
 </div>
 </template>
 
 <script>
   export default {
     name: 'resource-card',
-    props: ['resourceForCard'],
-    data () {
-      return {
-        demoEvents: [{
-          date: '2016/12/15',
-          title: 'eat',
-          desc: 'longlonglong description'
-        }, {
-          date: '2016/11/12',
-          title: 'this is a title'
-        }]
-      }
-    }
+    props: ['resourceForCard']
   }
   </script>
 

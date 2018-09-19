@@ -1,8 +1,9 @@
 <template>
 <div>
-  <section class="hero is-primary is-fullheight">
+  <section class="hero is-link is-fullheight">
     <div class="hero-body">
       <div class="container has-text-centered">
+      <h1 class="title is-size-1 brand-name">DingTeiler</h1>
         <div class="column is-4 is-offset-4">
           <h3 class="title has-text-white">Login</h3>
           <p class="subtitle has-text-white">Please login to proceed.</p>
@@ -11,8 +12,7 @@
               <div class="field">
                 <div class="control">
                 <p :class="{ 'control': true }">
-                    <input v-validate="'required|email'"class="is-large" :class="{'input': true, 'is-danger': errors.has('email') }" name="email" type="email" placeholder="Email" v-model="email">
-                    <span v-show="errors.has('email')" class="help is-danger">{{ errors.first('email') }}</span>
+                    <input class="is-medium" :class="{'input': true}" name="email" type="email" placeholder="Email" v-model="email">
                 </p>
                 </div>
               </div>
@@ -21,7 +21,7 @@
                   <input class="input is-large" type="password" placeholder="Your Password" v-model="password">
                 </div>
               </div>
-              <button class="button is-block is-info is-large" :disabled="checkFields">Login</button>
+              <button class="button is-block is-info is-medium" :disabled="!checkFields">Login</button>
             </form>
           </div>
           <p class="subtitle has-text-centered">
@@ -46,11 +46,7 @@
     },
     computed: {
       checkFields () {
-        if (!this.errors.has('email') && this.email !== '' && this.password !== '') {
-          return false
-        } else {
-          return true
-        }
+        return true
       }
     },
     methods: {

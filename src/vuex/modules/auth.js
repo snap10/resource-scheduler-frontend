@@ -1,10 +1,13 @@
 import authApi from '../../api/auth'
 import userApi from '../../api/users'
-// var jwtDecode = require('jwt-decode')
+import Vue from 'vue'
+
+var jwtDecode = require('jwt-decode')
 
 // initial state
 const state = {
-  currentUser: null,
+  currentUser: {},
+  usersResources:{},
   isLoggedIn: false,
   pendingLogin: false
 }
@@ -19,14 +22,13 @@ const mutations = {
   [types.LOGIN] (state) {
     state.pendingLogin = true
   },
-  [types.LOGIN_SUCCESS] (state, guest, user) {
+  [types.LOGIN_SUCCESS] (state, user) {
     state.pendingLogin = false
-    if (guest) {
-      state.isLoggedIn = false
-    } else {
-      state.isLoggedIn = true
+    if (user){
       state.currentUser = user
-    }
+      state.isLoggedIn=true
+    } 
+
   },
   [types.LOGOUT] (state) {
     state.isLoggedIn = false
@@ -39,33 +41,42 @@ const mutations = {
     } else {
       state.isLoggedIn = false
     }
+  },
+  usersResources(state,resources){
+    if (resources) {
+      resources.forEach(res => {
+        Vue.set(state.usersResources, res.id, res)
+      })
+    }
+  },
+  usersResourcesLoading(state,bool){
+    state.usersResourcesLoading=bool
   }
+
 }
 
 const actions = {
-  login ({ state, commit, rootState }, creds) {
+  login ({ state, commit, rootState, dispatch }, creds) {
     console.log('login...', creds)
     commit(types.LOGIN) // show spinner
-    return new Promise(resolve => {
-      authApi.login(creds)
+    authApi.login(creds,false)
         .then(response => {
-          // JSON responses are automatically parsed.
           localStorage.setItem('access_token', response.data.access_token)
-          localStorage.setItem('currentuser', JSON.stringify(response.data.user))
-          commit(types.LOGIN_SUCCESS, response.data.user)
-          resolve()
+          localStorage.setItem('refresh_token', response.data.refresh_token)
+          var token=jwtDecode(response.data.access_token)
+          console.log("Token",token)
+          dispatch('loadCurrentUser',token.sub)
         })
         .catch(e => {
           console.log(e)
         })
-    })
   },
   loadCurrentUser ({ state, commit, rootState }, id) {
     return new Promise(resolve => {
-      userApi.getUser(id)
+      authApi.userinfo(id)
         .then(response => {
           localStorage.setItem('currentuser', JSON.stringify(response.data))
-          commit(types.LOGIN_SUCCESS, response.data.data)
+          commit(types.LOGIN_SUCCESS, response.data)
           resolve()
         })
         .catch(e => {
@@ -95,6 +106,21 @@ const actions = {
     dispatch('loginGuest')
     // TODO loginGuest
     commit(types.LOGOUT)
+  },
+  loadUsersResources({    state,commit  }) {
+    commit('usersResourcesLoading', true)
+    userApi.getResourcesForUser(state.currentUser.id)
+      .then(response => {
+        // JSON responses are automatically parsed.
+        if (response.data) {
+          commit('usersResources', response.data)
+        }
+        commit('usersResourcesLoading', false)
+      })
+      .catch(e => {
+        console.error(e)
+        commit('usersResourcesLoading', false)
+      })
   }
 }
 
@@ -105,7 +131,10 @@ const getters = {
   currentUser: state => {
     return state.currentUser
   },
-  tokenPresent: state => {
+  usersResources: state => {
+   return state.usersResources
+  },
+  tokenPresent: () => {
     console.log('user is present, check for token')
     return (localStorage.getItem('access_token') || false)
   }

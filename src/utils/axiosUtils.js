@@ -1,5 +1,5 @@
 import axios from 'axios'
-import {store} from '../vuex/store'
+import store from '../vuex/store'
 
 export default () => {
   const defaultOptions = {

@@ -1,8 +1,9 @@
 <template>
 <div>
-  <section class="hero is-primary is-fullheight">
+  <section class="hero is-link is-fullheight">
     <div class="hero-body">
       <div class="container has-text-centered">
+        <h1 class="title is-size-1 brand-name">DingTeiler</h1>
         <div class="column is-4 is-offset-4">
           <h3 class="title has-text-white">Register</h3>
           <p class="subtitle has-text-white">Create an Account here.</p>
@@ -11,28 +12,28 @@
               <div class="field">
                 <label class="label" for="email">Email</label>
                 <p :class="{ 'control': true }">
-                    <input v-validate="'required|email'" class="is-large" :class="{'input': true, 'is-danger': errors.has('email') }" name="email" type="email" placeholder="Email" v-model="email">
-                    <span v-show="errors.has('email')" class="help is-danger">{{ errors.first('email') }}</span>
+                    <input v-validate="'required|email'" class="is-medium" :class="{'input': true}" name="email" type="email" placeholder="Email" v-model="email">
+                   
                 </p>
               </div>
               <div class="field">
                 <label class="label" for="username">Username</label>
                 <p :class="{ 'control': true }">
-                    <input class="is-large" :class="{'input': true, 'is-danger': !usernameAvailable }" @name="username" type="text" placeholder="Username" v-model="username">
+                    <input class="is-medium" :class="{'input': true, 'is-danger': !usernameAvailable }" @name="username" type="text" placeholder="Username" v-model="username">
                     <span v-show="!usernameAvailable" class="help is-danger">Username is not available</span>
                 </p>
               </div>
               <div class="field">
                 <div class="control">
-                  <input class="input is-large" type="password" placeholder="Your Password" v-model="password1">
+                  <input class="input is-medium" type="password" placeholder="Your Password" v-model="password1">
                 </div>
               </div>
               <div class="field">
                 <div class="control">
-                  <input class="input is-large" type="password" placeholder="Your Password" v-model="password2">
+                  <input class="input is-medium" type="password" placeholder="Your Password" v-model="password2">
                 </div>
               </div>
-              <button class="button is-block is-info is-large" :disabled="checkPassword">Register</button>
+              <button class="button is-block is-info is-medium" :disabled="checkPassword">Register</button>
             </form>
           </div>
            <p class="subtitle has-text-centered">
@@ -62,11 +63,9 @@
     },
     computed: {
       checkPassword () {
-        if (!this.errors.has('email') && this.email !== '' && this.password1 !== '' && this.password1 === this.password2) {
-          return false
-        } else {
+       
           return true
-        }
+        
       }
     },
     methods: {

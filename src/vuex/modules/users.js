@@ -1,5 +1,6 @@
 import usersApi from '../../api/users'
 import Vue from 'vue'
+
 // initial state
 const state = {
   users: [],
@@ -8,23 +9,26 @@ const state = {
 
 // mutations
 const mutations = {
-  setUsersLoadStatus (state, status) {
+  setUsersLoadStatus(state, status) {
     state.usersLoadStatus = status
   },
-  setUsers (state, users) {
+  setUsers(state, users) {
     if (users) {
       Object.keys(users).forEach(key => {
         Vue.set(state.users, users[key].id, users[key])
       })
     }
   },
-  setUser (state, user) {
+  setUser(state, user) {
     if (user && user.id) Vue.set(state.users, user.id, user)
   }
+
 }
 
 const actions = {
-  loadUsers ({commit}, data) {
+  loadUsers({
+    commit
+  }) {
     commit('setUsersLoadStatus', 1)
 
     usersApi.getUsers()
@@ -36,7 +40,8 @@ const actions = {
         // commit('setUsers', {})
         commit('setUsersLoadStatus', 3)
       })
-  }
+  },
+
 }
 
 const getters = {

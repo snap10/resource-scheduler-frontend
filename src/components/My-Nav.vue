@@ -8,11 +8,11 @@
           </span>
         </a>
         <router-link class="is-white" :to="'/'">
-          <img src="/static/assets/logo.png" alt="Noisemap logo" style="margin:0.1rem;height:2.7rem">
+          <img src="/assets/logo.png" alt="Logo" style="margin:0.1rem;height:2.7rem">
         </router-link>
         <div class="navbar-item " @click="isActive = false">
           <router-link class="is-white" :to="'/'">
-            <h1 class="title is-white">DingTeiler</h1>
+            <h1 class="subtitle brand-name has-text-white">DingTeiler</h1>
           </router-link>
         </div>
         <div class="navbar-burger burger" @click="isActive = !isActive">
@@ -24,13 +24,11 @@
 
       <div id="nav-menu" v-bind:class="{ 'is-active': isActive }" class="navbar-menu" @click="navClick">
         <div class="navbar-start">
-          <div class="navbar-item">
-            <router-link class="navbar-link" :to="'/resources'">
+          <router-link  class="navbar-item" :to="'/resources'">
                 Meine Ressourcen
-            </router-link>
-          </div>
+          </router-link >
           <div class="navbar-item has-dropdown" :class="{'is-active':activeAbout}" @click="activeAbout = !activeAbout">
-            <p class="navbar-link is-size-5">
+            <p class="navbar-link">
                   About
             </p>
             <div class="navbar-dropdown">
@@ -50,16 +48,12 @@
         </div>
         </div>
         <div class="navbar-end">
-          <div v-if="!isLoggedIn" class="navbar-item is-hoverable" @click="isActive = false">
-            <router-link class=" navbar-link" :to="'/login'">
+          <router-link v-if="!isLoggedIn" class="navbar-item is-hoverable" @click="isActive = false" :to="'/login'">
               Login
-            </router-link>
-          </div>
-          <div v-if="!isLoggedIn" class="navbar-item is-hoverable" @click="isActive = false">
-            <router-link class="navbar-link" :to="'/register'">
+          </router-link>
+          <router-link v-if="!isLoggedIn" class="navbar-item is-hoverable" @click="isActive = false" :to="'/register'">
               Register
-            </router-link>
-          </div>
+          </router-link>
           <div v-if="isLoggedIn" class="">
 
             <div class="navbar-item has-dropdown" :class="{'is-active':activeProfile}" @click="activeProfile = !activeProfile">
@@ -93,7 +87,7 @@
   import SendReportModal from './modals/SendReportModal.vue'
   export default {
     name: 'my-nav',
-    components:  {
+    components: {
       SendReportModal
     },
     data() {
@@ -129,7 +123,7 @@
         return this.$store.getters.isLoggedIn
       },
       user() {
-        return this.$store.getters.currentUser
+        return this.$store.getters.currentUser||{}
       }
 
     }
@@ -144,6 +138,7 @@
       color: black
     }
   }
+
 
   .navbar-item {
     height: 100%

@@ -2,22 +2,17 @@ import Vuex from 'vuex'
 import Vue from 'vue'
 import users from './modules/users'
 import auth from './modules/auth'
+import resources from './modules/resources'
+import organizations from './modules/organizations'
 
 const debug = process.env.NODE_ENV !== 'production'
-
 Vue.use(Vuex)
-export const store = new Vuex.Store({
+export default new Vuex.Store({
   modules: {
     auth,
-    users
+    users,
+    organizations,
+    resources
   },
-  strict: debug,
-  state: {
-    searchLatLng: null,
-    mapCenter: null,
-    mapBounds: null,
-    zoom: 5
-  },
-  mutations: {},
-  getters: {}
+  strict: debug
 })

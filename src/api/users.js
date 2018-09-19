@@ -6,16 +6,43 @@ export default {
   },
   getUser (id) {
     if (!id) {
-      console.error('userid hat not been provided to get user')
+      console.error('id hat not been provided to get user')
       return
     }
     return client().get('account/user/' + id)
   },
   updateUser (id, userObject) {
     if (!id) {
-      console.error('userid hat not been provided to get user')
+      console.error('id had not been provided to get user')
       return
     }
     return client().put('account/user/' + id, userObject)
+  },
+  getResourcesForUser(userid) {
+    if (!userid) {
+      console.error('id had not been provided')
+      return
+    }
+    //return client().get(`account/user/${userid}/resources`)
+    return new Promise((resolve,reject) =>{
+      var response = {
+       "data": [{
+        id: 1,
+        responsible_person: "Mustermann",
+        main_picture_url: 'https://ffw-baltringen.de/images/stories/testslide/fzg2008.jpg',
+        name: 'Feuerwehrauto 1',
+        description: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.'
+      
+      }, {
+        id: 2,
+        responsible_person: "Musterfrau",
+        main_picture_url: 'https://ffw-baltringen.de/images/stories/testslide/heim1.jpg',
+        name: 'Umkleideraum',
+        description: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.'
+      }]
+     }
+      resolve(response)
+   })
+
   }
 }

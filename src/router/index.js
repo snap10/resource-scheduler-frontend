@@ -3,7 +3,6 @@ import Router from 'vue-router'
 import Home from '@/views/Home.vue'
 import Login from '@/views/Login.vue'
 import Register from '@/views/Register.vue'
-import Resources from '@/views/Resources.vue'
 import Resource from '@/views/Resource.vue'
 import About from '@/views/About.vue'
 Vue.use(Router)
@@ -28,11 +27,6 @@ export default new Router({
       path: '/about',
       name: 'About',
       component: About
-    },
-    {
-      path: '/resources',
-      name: 'Resources',
-      component: Resources
     },
     {
       path: '/resources/:id',
