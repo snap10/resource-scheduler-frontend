@@ -32,17 +32,17 @@
      <div class="timeline">
        <div  :key="year" v-for="(yearObject,year) in eventsByYearMonth">
       <header class="timeline-header">
-        <span class="tag is-large is-primary">{{year}}</span>
+        <span class="tag is-large is-link">{{year}}</span>
       </header>
       <div class="timeline-item"></div>
       <div :key="month" v-for="(monthObject,month) in yearObject">
           <header class="timeline-header">
-            <span class="tag is-primary">{{month}}</span>
+            <span class="tag is-link">{{month}}</span>
           </header>
        
           <div :key="index" v-for="(event,index) in monthObject">
             <div class="timeline-item">
-              <div class="timeline-marker"></div>
+              <div class="timeline-marker is-icon is-link has-text-white"><p class="is-size-7">{{event.start_datetime | moment("DD")}}</p></div>
               <div class="timeline-content box margin-1 is-paddingless">
                 <div class="padding-1">
                 <p class="is-size-6">{{event.start_datetime | moment("calendar", null,{sameElse:"dddDoMMM, HH:mm"})}}</p>
@@ -182,6 +182,6 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .timeline-marker{
-  z-index: 100;
+  z-index: 10;
 }
 </style>
