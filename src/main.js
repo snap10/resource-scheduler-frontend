@@ -8,8 +8,20 @@ import moment from 'moment'
 require('moment/locale/de')
 Vue.config.productionTip = false
 Vue.use(require('vue-moment'),{moment});
-new Vue({
+var v = new Vue({
   router,
   store,
   render: h => h(App)
-}).$mount('#app')
+})
+
+var keycloak = Keycloak('/keycloak.json');
+    keycloak.init({onLoad: 'login-required',checkLoginIframe: false}).success(function(authenticated) {
+        console.log(authenticated)
+        if(authenticated){
+          store.commit('setKeycloak',keycloak)
+        }
+        v.$mount('#app')
+        return authenticated
+    }).error(function() {
+      this.$router.push({name:"Error"})
+    });

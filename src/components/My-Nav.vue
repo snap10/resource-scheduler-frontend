@@ -8,13 +8,12 @@
           </span>
         </a>
         <router-link class="is-white" :to="'/'">
-          <img src="/assets/logo.png" alt="Logo" style="margin:0.1rem;height:2.7rem">
-        </router-link>
-        <div class="navbar-item " @click="isActive = false">
-          <router-link class="is-white" :to="'/'">
+          <div class="navbar-item " @click="isActive = false">
+            <img src="/assets/logo.png" alt="Logo" style="margin:0.1rem;height:2.7rem">
+
             <h1 class="subtitle brand-name has-text-white">DingTeiler</h1>
-          </router-link>
-        </div>
+          </div>
+        </router-link>
         <div class="navbar-burger burger" @click="isActive = !isActive">
           <span></span>
           <span></span>
@@ -24,42 +23,46 @@
 
       <div id="nav-menu" v-bind:class="{ 'is-active': isActive }" class="navbar-menu" @click="navClick">
         <div class="navbar-start">
-          <router-link  class="navbar-item" :to="'/resources'">
-                Meine Ressourcen
-          </router-link >
-          <div class="navbar-item has-dropdown" :class="{'is-active':activeAbout}" @click="activeAbout = !activeAbout">
-            <p class="navbar-link">
-                  About
+          <router-link class="navbar-item" :to="'/resources/create'">
+            Ressource anlegen
+          </router-link>
+          <div class="navbar-item navbar-link is-arrowless" :class="{'is-active':activeAbout}" @click="activeAbout = !activeAbout">
+            <p class="">
+              About
             </p>
             <div class="navbar-dropdown">
-                  <a class="navbar-item" @click:prevent="openReportModal">
-                    Send Report
-                  </a>
-                  <router-link :to="'/datenschutzerklaerung'" class="navbar-item">
-                    Datenschutzerklärung
-                  </router-link>
-                  <router-link :to="'/agb'" class="navbar-item">
-                    AGBs
-                  </router-link>
-                  <router-link :to="'/impressum'" class="navbar-item">
-                    Impressum
-                  </router-link>
+              <a class="navbar-item" @click:prevent="openReportModal">
+                Send Report
+              </a>
+              <router-link :to="'/datenschutzerklaerung'" class="navbar-item">
+                Datenschutzerklärung
+              </router-link>
+              <router-link :to="'/agb'" class="navbar-item">
+                AGBs
+              </router-link>
+              <router-link :to="'/impressum'" class="navbar-item">
+                Impressum
+              </router-link>
             </div>
-        </div>
+          </div>
         </div>
         <div class="navbar-end">
           <router-link v-if="!isLoggedIn" class="navbar-item is-hoverable" @click="isActive = false" :to="'/login'">
-              Login
+            Login
           </router-link>
           <router-link v-if="!isLoggedIn" class="navbar-item is-hoverable" @click="isActive = false" :to="'/register'">
-              Register
+            Register
           </router-link>
           <div v-if="isLoggedIn" class="">
 
-            <div class="navbar-item has-dropdown" :class="{'is-active':activeProfile}" @click="activeProfile = !activeProfile">
-              <a class="navbar-link is-size-5">
-                Hello {{user.username}}
-              </a>
+            <div class="navbar-item navbar-item navbar-link is-arrowless" :class="{'is-active':activeProfile}" @click="activeProfile = !activeProfile">
+              <figure class="avatar">
+                <img src="https://placehold.it/128x128">
+              </figure>
+              <p class="username">
+                {{user.preferred_username}}
+              </p>
+
               <div class="navbar-dropdown">
 
                 <router-link :to="'/profile'" class="navbar-item">
@@ -92,7 +95,7 @@
     },
     data() {
       return {
-        isActive:false,
+        isActive: false,
         activeAbout: false,
         activeProfile: false,
         reportModal: false
@@ -114,8 +117,11 @@
         this.activeAbout = false
         this.activeProfile = false
       },
-      navClick(){
-      if(this.isActive) this.isActive=false
+      navClick() {
+        if (this.isActive) this.isActive = false
+      },
+      logout(){
+        this.$store.getters.keycloak.logout()
       }
     },
     computed: {
@@ -123,12 +129,11 @@
         return this.$store.getters.isLoggedIn
       },
       user() {
-        return this.$store.getters.currentUser||{}
+        return this.$store.getters.currentUser || {}
       }
 
     }
   }
-
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
@@ -138,7 +143,6 @@
       color: black
     }
   }
-
 
   .navbar-item {
     height: 100%
@@ -166,10 +170,12 @@
   .margin-left-1 {
     margin-left: 1rem
   }
+
   #nav-menu {
     z-index: 600;
   }
-  .navbar-dropdown{
+
+  .navbar-dropdown {
     z-index: 600;
   }
 </style>

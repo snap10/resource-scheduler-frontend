@@ -2,6 +2,7 @@ import client from '../utils/axiosUtils'
 var resources ={
     1:{
       id: 1,
+      organisation_id: 2,
       responsible_person: "Mustermann",
       main_picture_url: 'https://ffw-baltringen.de/images/stories/testslide/fzg2008.jpg',
       name: 'Feuerwehrauto 1',
@@ -9,6 +10,7 @@ var resources ={
      },
     2:{
       id: 2,
+      organisation_id: 2,
       responsible_person: "Musterfrau",
       main_picture_url: 'https://ffw-baltringen.de/images/stories/testslide/heim1.jpg',
       name: 'Umkleideraum',
@@ -37,6 +39,13 @@ export default {
    }
     resolve(response)
  })
+  },
+  postResource(resource){
+    if(!resource){
+      console.error('resource has not been provided')
+      return
+    }
+    return client().post(`resources`,resource)
   }
 
 }

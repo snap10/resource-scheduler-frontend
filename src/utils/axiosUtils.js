@@ -5,7 +5,7 @@ export default () => {
   const defaultOptions = {
     baseURL: `http://localhost/api/`,
     headers: {
-      Authorization: store.getters.isLoggedIn ? `Token ${localStorage.getItem('token')}` : ''
+      Authorization: store.getters.keycloak.authenticated ? `Bearer ${store.getters.keycloak.token}` : ''
     }
   }
 

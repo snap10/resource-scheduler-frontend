@@ -1,4 +1,5 @@
 import client from '../utils/axiosUtils'
+var organizationsApi = "organizationsapi/"
 var resources =[{
   id: 1,
   responsible_person: "Mustermann",
@@ -16,20 +17,33 @@ var resources =[{
 export default {
   getResourcesForOrganization(orgid) {
     if (!orgid) {
-      console.error('id hat not been provided')
+      console.error('id had not been provided')
       return
     }
     return resources
-    //return client().get(`organization/${orgid}/resources/`)
+    //return client().get(`${organizationsApi}organizations/${orgid}/resources/`)
   },
   getOrganization(orgid){
     if (!orgid) {
-      console.error('id hat not been provided')
+      console.error('id had not been provided')
       return
     }
-    //return client().get(`organization/${orgid}`)
+    //return client().get(`${organizationsApi}organizations/${orgid}`)
     return {
-      id:"xyz",
+      id: 2,
+      name: "TestOrg",
+      created_at: 230923704,
+      profile_picture_path: "path.to.image.de"
+    }
+  },
+  getOrganizationsForUser(userid){
+    if (!userid) {
+      console.error('userid had not been provided')
+      return
+    }
+    //return client().get(`${organizationsApi}organization/${orgid}`)
+    return {
+      id: 2,
       name: "TestOrg",
       created_at: 230923704,
       profile_picture_path: "path.to.image.de"

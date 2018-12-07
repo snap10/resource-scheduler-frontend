@@ -1,11 +1,18 @@
 <template>
-  <div class="home container">
+  <div class="home">
+    <div class="has-text-centered">
+      <h1 class="title"> Hallo {{user.preferred_username}}</h1>
+      <h3 class="subtitle">Hier siehst du alle Resourcen, auf die du Zugriff hast!</h3>
+    </div>
     <div class="columns">
       <div class="column">
-        <div :key="index" v-for="(resource,index) in resources">
+        <div class="is-flex flex-wrap">
+        <div class="resource-card" :key="index" v-for="(resource,index) in resources">
           <router-link :to='"/resources/"+resource.id'>
-            <resource-card class="resource-card" :resource-for-card="resource"/>
+            <resource-card :resource-for-card="resource"/>
           </router-link>
+        </div>
+          
         </div>
       </div>
     </div>
@@ -26,17 +33,17 @@ export default {
   computed: {
       resources(){
           return this.$store.getters.usersResources||[]
+      },
+      user() {
+        return this.$store.getters.currentUser||{}
       }
   }
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-.container{
-  padding: 1rem;
-}
-.resource-card{
-  margin-bottom: 2rem;
+<style lang=scss scoped>
+.flex-wrap{
+  flex-wrap: wrap
 }
 </style>

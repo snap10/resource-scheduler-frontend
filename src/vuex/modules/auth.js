@@ -2,46 +2,16 @@ import authApi from '../../api/auth'
 import userApi from '../../api/users'
 import Vue from 'vue'
 
-var jwtDecode = require('jwt-decode')
 
 // initial state
 const state = {
-  currentUser: {},
-  usersResources:{},
-  isLoggedIn: false,
-  pendingLogin: false
-}
-const types = {
-  LOGIN: 'LOGIN',
-  LOGIN_SUCCESS: 'LOGIN_SUCCESS',
-  LOGOUT: 'LOGOUT'
+  usersResources: {},
+  keycloak: {},
+  usersResourcesLoading: false
 }
 
 // mutations
 const mutations = {
-  [types.LOGIN] (state) {
-    state.pendingLogin = true
-  },
-  [types.LOGIN_SUCCESS] (state, user) {
-    state.pendingLogin = false
-    if (user){
-      state.currentUser = user
-      state.isLoggedIn=true
-    } 
-
-  },
-  [types.LOGOUT] (state) {
-    state.isLoggedIn = false
-    state.currentUser = null
-  },
-  setCurrentUser (state, user) {
-    state.currentUser = user
-    if (user.role_level !== 'guest') {
-      state.isLoggedIn = true
-    } else {
-      state.isLoggedIn = false
-    }
-  },
   usersResources(state,resources){
     if (resources) {
       resources.forEach(res => {
@@ -51,6 +21,9 @@ const mutations = {
   },
   usersResourcesLoading(state,bool){
     state.usersResourcesLoading=bool
+  },
+  setKeycloak(state,keycloak){
+    state.keycloak=keycloak
   }
 
 }
@@ -107,9 +80,9 @@ const actions = {
     // TODO loginGuest
     commit(types.LOGOUT)
   },
-  loadUsersResources({    state,commit  }) {
+  loadUsersResources({state,commit  }) {
     commit('usersResourcesLoading', true)
-    userApi.getResourcesForUser(state.currentUser.id)
+    userApi.getResourcesForUser(state.keycloak.idTokenParsed.sub)
       .then(response => {
         // JSON responses are automatically parsed.
         if (response.data) {
@@ -126,17 +99,16 @@ const actions = {
 
 const getters = {
   isLoggedIn: state => {
-    return state.isLoggedIn
+    return state.keycloak.authenticated
   },
   currentUser: state => {
-    return state.currentUser
+    return state.keycloak.idTokenParsed
+  },
+  keycloak: state => {
+    return state.keycloak
   },
   usersResources: state => {
    return state.usersResources
-  },
-  tokenPresent: () => {
-    console.log('user is present, check for token')
-    return (localStorage.getItem('access_token') || false)
   }
 }
 export default {

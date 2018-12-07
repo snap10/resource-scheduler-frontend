@@ -7,25 +7,18 @@
 </template>
 
 <script>
-var jwtDecode = require('jwt-decode')
 import MyNav from './components/My-Nav.vue'
 import Loader from './components/Loader.vue'
 export default {
   name: 'app',
   components: { MyNav, Loader },
-  created(){
-    var currentString = localStorage.getItem('currentuser')
-    var currentUser = (currentString)?JSON.parse(currentString):null
-    if(currentUser){
-      this.$store.commit('setCurrentUser',currentUser)
+  data() {
+    return {
     }
   },
   computed: {
-    setupFinished() {
-        if(!(['Login','Register'].indexOf(this.$route.name)>-1)&&!this.$store.getters.isLoggedIn){
-          this.$router.push({name:"Login"})
-        }
-        return true
+    setupFinished(){
+      return this.$store.getters.keycloak.authenticated
     }
   }
 }
@@ -127,5 +120,6 @@ fieldset, label { margin: 0; padding: 0; border:none; }
   right: 0;
   top: 3.25rem;
 }
+
 }
 </style>
