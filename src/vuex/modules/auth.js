@@ -45,7 +45,7 @@ const actions = {
         })
   },
   loadCurrentUser ({ state, commit, rootState }, id) {
-    return new Promise(resolve => {
+    return new Promise((resolve,reject) => {
       authApi.userinfo(id)
         .then(response => {
           localStorage.setItem('currentuser', JSON.stringify(response.data))
@@ -54,6 +54,7 @@ const actions = {
         })
         .catch(e => {
           console.log('error loading currentUser', e)
+          reject()
         })
     })
   },

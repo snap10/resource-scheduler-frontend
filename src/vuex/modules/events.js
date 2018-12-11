@@ -23,7 +23,7 @@ const actions = {
         commit('events',{resourceid:resourceid,events:response.data})
       })
       .catch(e => {
-        console.log('error loading currentUser', e)
+        console.log('error loading events', e)
       })
   },
   loadEvent({commit},resourceid,evtid){
@@ -32,7 +32,20 @@ const actions = {
       commit('event', response.data)
     })
     .catch(e => {
-      console.log('error loading currentUser', e)
+      console.log('error loading event', e)
+    })
+  },
+  createEvent({dispatch}, {event, resourceid}){
+    return new Promise((resolve,reject) => {
+      eventApi.postEvent(resourceid, event)
+      .then(() => {
+        dispatch('loadEvents', resourceid)
+        resolve()
+      })
+      .catch(e => {
+        console.log('error posting event', e)
+        reject()
+      })
     })
   }
 }

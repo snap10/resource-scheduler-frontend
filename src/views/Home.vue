@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <div class="has-text-centered">
+    <div class="has-text-centered margin-1">
       <h1 class="title"> Hallo {{user.preferred_username}}</h1>
       <h3 class="subtitle">Hier siehst du alle Resourcen, auf die du Zugriff hast!</h3>
     </div>

@@ -151,9 +151,9 @@ export default {
     resolve(response)
  })
   },
-  postEvent(resourceid,newevent){
+  postEvent(resourceid, newevent){
     if(!newevent||!resourceid){
-      console.error('event or resourceid has not been provided')
+      console.error('event or resourceid has not been provided',resourceid,newevent)
       return
     }
     return client().post(`${eventsApi}resources/${resourceid}/events/`,newevent)
