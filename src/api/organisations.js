@@ -1,5 +1,5 @@
 import client from '../utils/axiosUtils'
-var organizationsApi = "organizationsapi/"
+var organisationsApi = "organisationsapi/"
 var resources =[{
   id: 1,
   responsible_person: "Mustermann",
@@ -15,7 +15,7 @@ var resources =[{
   description: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.'
 }]
 export default {
-  getResourcesForOrganization(orgid) {
+  getResourcesForOrganisation(orgid) {
     if (!orgid) {
       console.error('id had not been provided')
       return
@@ -23,7 +23,7 @@ export default {
     return resources
     //return client().get(`${organizationsApi}organizations/${orgid}/resources/`)
   },
-  getOrganization(orgid){
+  getOrganisation(orgid){
     if (!orgid) {
       console.error('id had not been provided')
       return
@@ -36,7 +36,7 @@ export default {
       profile_picture_path: "path.to.image.de"
     }
   },
-  getOrganizationsForUser(userid){
+  getOrganisationsForUser(userid){
     if (!userid) {
       console.error('userid had not been provided')
       return

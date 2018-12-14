@@ -4,7 +4,7 @@ import users from './modules/users'
 import auth from './modules/auth'
 import resources from './modules/resources'
 import events from './modules/events'
-import organizations from './modules/organizations'
+import organizations from './modules/organisations'
 
 const debug = process.env.NODE_ENV !== 'production'
 Vue.use(Vuex)

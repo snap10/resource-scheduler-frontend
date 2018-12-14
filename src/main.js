@@ -17,11 +17,19 @@ var v = new Vue({
 var keycloak = Keycloak('/keycloak.json');
     keycloak.init({onLoad: 'login-required',checkLoginIframe: false}).success(function(authenticated) {
         console.log('Authenticated?',authenticated)
-        if(authenticated){
-          store.commit('setKeycloak',keycloak)
-        }
-        v.$mount('#app')
         if(!authenticated) router.push('Error')
+        else{
+          store.commit('setKeycloak',keycloak)
+          store.dispatch('loadUserAccount',keycloak.idToken)
+          .then(()=>{
+            v.$mount('#app')
+          })
+          .catch(() =>{
+            window.location = "/error.html";
+          })
+
+        }
+        
         return authenticated
     }).error(function() {
       window.location = "/error.html";

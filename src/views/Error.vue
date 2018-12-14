@@ -1,9 +1,13 @@
 <template>
-  <div class="error container">
-    <div class="content">
-      <p>Ooops</p>
-    </div>
-  </div>
+  <section class="hero is-link is-fullheight">
+          <div class="hero-body">
+            <div class="container has-text-centered">
+              <p class="is-size-1">&#128543;</p>
+            <h1 class="title is-size-1 brand-name">DingTeiler Error</h1>
+            <h1 class="subtitle is-size-1 brand-name">Oops, something went wrong!</h1>
+            </div>
+          </div>
+        </section>
 </template>
 
 <script>

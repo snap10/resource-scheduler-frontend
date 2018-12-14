@@ -26,25 +26,9 @@
           <router-link class="navbar-item" :to="'/resources/create'">
             Ressource anlegen
           </router-link>
-          <div class="navbar-item navbar-link is-arrowless" :class="{'is-active':activeAbout}" @click="activeAbout = !activeAbout">
-            <p class="">
-              About
-            </p>
-            <div class="navbar-dropdown">
-              <a class="navbar-item" @click:prevent="openReportModal">
-                Send Report
-              </a>
-              <router-link :to="'/datenschutzerklaerung'" class="navbar-item">
-                Datenschutzerklärung
-              </router-link>
-              <router-link :to="'/agb'" class="navbar-item">
-                AGBs
-              </router-link>
-              <router-link :to="'/impressum'" class="navbar-item">
-                Impressum
-              </router-link>
-            </div>
-          </div>
+          <router-link class="navbar-item" :to="'/organisations'">
+            Your Organisations
+          </router-link>
         </div>
         <div class="navbar-end">
           <router-link v-if="!isLoggedIn" class="navbar-item is-hoverable" @click="isActive = false" :to="'/login'">
@@ -68,6 +52,9 @@
                 <router-link :to="'/profile'" class="navbar-item">
                   Profile
                 </router-link>
+                <a href="https://keycloak.auth.134.60.152.98.xip.io/auth/realms/dingteiler/account/" class="navbar-item">
+                  Account
+                </a>
                 <router-link :to="'/settings'" class="navbar-item">
                   Settings
                 </router-link>
@@ -102,10 +89,6 @@
       }
     },
     methods: {
-      logout() {
-        this.$store.dispatch("logout")
-        this.$store.dispatch("loginGuest")
-      },
       openReportModal() {
         this.reportModal = true
       },
@@ -121,7 +104,7 @@
         if (this.isActive) this.isActive = false
       },
       logout(){
-        this.$store.getters.keycloak.logout()
+        this.$store.dispatch('logout');
       }
     },
     computed: {

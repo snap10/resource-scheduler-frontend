@@ -2,7 +2,7 @@
   "realm": "dingteiler",
   "auth-server-url": "https://keycloak.auth.134.60.152.98.xip.io/auth",
   "ssl-required": "external",
-  "resource": "dingteiler-frontend",
+  "resource": "dingteiler",
   "public-client": true,
   "confidential-port": 0
 }

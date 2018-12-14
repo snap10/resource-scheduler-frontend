@@ -2,28 +2,37 @@ import client from '../utils/axiosUtils'
 
 export default {
   getUsers () {
-    return client().get('account/user')
+    return client().get('accounts/user')
   },
   getUser (id) {
     if (!id) {
       console.error('id hat not been provided to get user')
       return
     }
-    return client().get('account/user/' + id)
+    //return client().get('account/user/' + id)
+    return new Promise((resolve,reject) =>{
+      var response = {
+       "data": {
+        id: id,
+        organisations: []
+        }
+      }
+      resolve(response)
+   })
   },
   updateUser (id, userObject) {
     if (!id) {
       console.error('id had not been provided to get user')
       return
     }
-    return client().put('account/user/' + id, userObject)
+    return client().put('accounts/user/' + id, userObject)
   },
   getResourcesForUser(userid) {
     if (!userid) {
       console.error('id had not been provided')
       return
     }
-    //return client().get(`account/user/${userid}/resources`)
+    //return client().get(`accounts/user/${userid}/resources`)
     return new Promise((resolve,reject) =>{
       var response = {
        "data": [{

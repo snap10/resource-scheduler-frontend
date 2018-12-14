@@ -1,8 +1,8 @@
 <template>
-  <div class="resource container">
-    <loader :loaded="!resourceLoading"></loader>
+  <div class="organisation container">
+    <loader :loaded="!organisationLoading"></loader>
     <section>
-      <div v-if="resource" class=" has-text-centered">
+      <div v-if="organisation" class=" has-text-centered">
                 <div class="columns is-vcentered">
                     <div class="column is-5">
                       <!--TODO make Image Upload possible-->
@@ -13,13 +13,13 @@
                     <div class="column is-6 is-offset-1">
                       <div class="field">
                         <div class="control">
-                          <input class="input" type="text" v-model="resource.name" placeholder="Titel"/>
+                          <input class="input" type="text" v-model="organisation.name" placeholder="Titel"/>
                         </div>
                       </div>
                       <article class="is-4">
                         <div class="field">
                           <div class="control">
-                           <textarea class="textarea" v-model="resource.description" placeholder="Beschreibung der Resource"/>
+                           <textarea class="textarea" v-model="organisation.description" placeholder="Beschreibung der Organisation"/>
                           </div>
                         </div>
                       </article>
@@ -35,7 +35,7 @@
             <div class="margin-2"></div>
       <section>
         <div class="has-text-centered">
-          <button class="button is-primary" @click="addResource">
+          <button class="button is-primary" @click="addOrganisation">
             Hinzufügen
           </button>
         </div>
@@ -44,22 +44,23 @@
 </template>
 
 <script>
-import resourceApi from './../api/resources'
-import ResourceCard from './../components/Resource-Card.vue'
+import organisationApi from './../api/organisations'
 import Loader from './../components/Loader.vue'
 export default {
-  name: 'add-resource',
-  components: { ResourceCard, Loader },
+  name: 'edit-organisation',
+  components: { Loader },
   data () {
     return {
-      resourceid: {},
+      organisationid: null,
+      create:false,
       loaded: false,
       toggle:false
     }
   },
   created () {
-    this.resourceid = this.$route.params.id
-    this.$store.dispatch('loadResource',this.resourceid)
+    this.organisationid = this.$route.params.id
+    if(this.organisationid)this.$store.dispatch('loadOrganisation',this.organisationid)
+    else this.create=true
 
   },
   methods:{
@@ -72,12 +73,12 @@ export default {
       this.toggle=!this.toggle
       console.log(evt)
     },
-    addResource(){
-      if(validate(this.resource)){
-        resourceApi.postResource(this.resouce)
+    addOrganisation(){
+      if(validate(this.organisation)){
+        organisationApi.postOrganisation(this.resouce)
         .then(resp => {
           if(resp && resp.headers.Location){
-            this.$router.push({ name: 'Resource', params: { id:resp.headers.Location }})
+            this.$router.push({ name: 'Organisation', params: { id:resp.headers.Location }})
           }
         })
         .catch(err => {
@@ -93,14 +94,14 @@ export default {
     }
   },
   computed:{
-    resourceLoading(){
-      return this.$store.getters.resourceLoading||false
+    organisationLoading(){
+      return this.$store.getters.organisationLoading||false
     },
-    resource(){
-      return this.$store.getters.resource(this.resourceid)||{}
+    organisation(){
+      return this.$store.getters.organisation(this.organisationid)||{}
     },
     getImageUrl(){
-      return this.resource.main_picture_url || "https://cdn1.iconfinder.com/data/icons/camera-13/100/Artboard_62-512.png"
+      return this.organisation.main_picture_url || "https://cdn1.iconfinder.com/data/icons/camera-13/100/Artboard_62-512.png"
     }
   }
 }

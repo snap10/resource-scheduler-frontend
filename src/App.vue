@@ -2,7 +2,7 @@
   <div id="app">
       <my-nav  v-if="!(['Login','Register'].indexOf($route.name)>-1)"></my-nav>
       <loader :loaded="setupFinished"></loader>
-      <router-view v-if="setupFinished"  :key="$route.path" class="fullscreen" :class="{'has-navbar-fixed-top':!(['Login','Register'].indexOf($route.name)>-1)}" id="content"></router-view>
+      <router-view v-if="setupFinished"  :key="$route.path" class="" :class="{'has-navbar-fixed-top':!(['Login','Register'].indexOf($route.name)>-1)}" id="content"></router-view>
   </div>
 </template>
 
@@ -35,7 +35,7 @@ fieldset, label { margin: 0; padding: 0; border:none; }
   width: 100%;
 }
 .has-navbar-fixed-top {
-  margin-top: 3.5rem;
+  padding-top: 3.25rem;
 }
 .is-half{
   width: 50%;
@@ -48,7 +48,7 @@ fieldset, label { margin: 0; padding: 0; border:none; }
   overflow-y: scroll;
 }
 .fullscreen{
-  height: calc(100vh - 3.5rem);
+  height: calc(100vh - 3rem);
   position: relative;
 }
 .scrollx {

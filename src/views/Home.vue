@@ -28,9 +28,12 @@ export default {
     return {}
   },
   created () {
-    this.$store.dispatch('loadUsersResources')
+    if(this.organisations.length==0) this.$router.push('/organisations')
   },
   computed: {
+      organisations(){
+          return this.$store.getters.usersOrganisations||[]
+      },
       resources(){
           return this.$store.getters.usersResources||[]
       },
