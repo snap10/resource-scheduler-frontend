@@ -1,20 +1,29 @@
 <template>
   <div class="container">
-      <div id="emptyState" v-if="organisationsEmpty">
-         <div class="has-text-centered margin-1">
-      <h1 class="title"> Hey {{user.preferred_username}},</h1>
-      <h3 class="subtitle">scheinbar bist du noch in keiner Organisation aktiv!</h3>
-      <h3 class="subtitle">Lege doch einfach eine neue Organisation an!</h3>
-      <router-link class="button is-success" :to="'/organisations/create'" >Jetzt erstellen</router-link>
+    <div class="level margin-1">
+          <router-link class="button is-success" :to="'/organisations/create'" >Organisation erstellen</router-link>
     </div>
-      </div>
+    <div id="emptyState" v-if="organisationsEmpty">
+         <div class="has-text-centered margin-1">
+          <h1 class="title"> Hey {{user.preferred_username}},</h1>
+          <h3 class="subtitle">scheinbar bist du noch in keiner Organisation aktiv!</h3>
+          <h3 class="subtitle">Lege doch einfach eine neue Organisation an!</h3>
+        </div>
+    </div>
+    <div v-if="!organisationsEmpty">
+        <div v-for="(organisation,index) in organisations" :key="index">
+          <div>
+            {{organisation}}
+          </div>
+        </div>
+    </div>
   </div>
 </template>
 
 <script>
   import Loader from './../components/Loader.vue'
   export default {
-    name: 'organization',
+    name: 'organisations',
     components: {
       Loader
     },
@@ -22,7 +31,7 @@
       return {}
     },
     created () {
-      if(this.organisations.length==0) this.$router.push('/organisations')
+      
     },
     computed: {
       organisationsEmpty(){

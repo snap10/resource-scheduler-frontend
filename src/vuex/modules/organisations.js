@@ -6,13 +6,18 @@ import Vue from 'vue'
 const state = {
   usersOrganisations: {},
   organisations:{},
-  usersOrganisationsLoading: false
+  usersOrganisationsLoading: false,
+  organisationLoading:false
 
 }
 
 // mutations
 const mutations = {
-  
+  saveOrganisation(state,organisation){
+    if(organisation){
+      Vue.set(state.organisations,organisation.id,organisation)
+    } 
+  },
   usersOrganisations(state,orgs){
     if (orgs) {
       orgs.forEach(res => {
@@ -25,12 +30,28 @@ const mutations = {
   },
   usersOrganisatinosLoading(state,bool){
     state.usersOrganisationsLoading=bool
-  },
+  }
 
 }
 
 const actions = {
-  
+  loadOrganisation ({commit},id){
+    return new Promise((resolve,reject) =>{
+      organisationsApi.getOrganisation(id)
+      .then(response=>{
+        if(response.data){
+          commit('saveOrganisation',response.data)
+          resolve(response.data)
+        }else{
+          throw Error('No content in response')
+        }
+      })
+      .catch(err=>{
+        console.error(err)
+        reject(err)
+      })
+    })
+  }
 }
 
 const getters = {
@@ -40,7 +61,7 @@ const getters = {
     }
   }, 
   usersOrganisations: state => {
-   return state.usersOrganisations
+   return Object.values(state.usersOrganisations)
   }
 }
 export default {

@@ -22,16 +22,17 @@ var keycloak = Keycloak('/keycloak.json');
           store.commit('setKeycloak',keycloak)
           store.dispatch('loadUserAccount',keycloak.idToken)
           .then(()=>{
-            v.$mount('#app')
+            
           })
           .catch(() =>{
-            window.location = "/error.html";
+            router.push('Error')
           })
 
         }
+        v.$mount('#app')
         
         return authenticated
     }).error(function() {
-      window.location = "/error.html";
-
+      router.push('Error')
+      v.$mount('#app')
     });

@@ -23,9 +23,6 @@
 
       <div id="nav-menu" v-bind:class="{ 'is-active': isActive }" class="navbar-menu" @click="navClick">
         <div class="navbar-start">
-          <router-link class="navbar-item" :to="'/resources/create'">
-            Ressource anlegen
-          </router-link>
           <router-link class="navbar-item" :to="'/organisations'">
             Your Organisations
           </router-link>

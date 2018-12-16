@@ -34,11 +34,6 @@ export default new Router({
       component: About
     },
     {
-      path: '/resources/create',
-      name: 'AddResource',
-      component: EditResource
-    },
-    {
       path: '/organisations',
       name: 'Organisations',
       component: Organisations
@@ -49,22 +44,27 @@ export default new Router({
       component: EditOrganisation
     },
     {
-      path: '/organisations/:id',
+      path: '/organisations/:orgid',
       name: 'Organisation',
       component: Organisation
     },
     {
-      path: '/organisations/:id/edit',
+      path: '/organisations/:orgid/edit',
       name: 'EditOrganisation',
       component: EditOrganisation
     },
     {
-      path: '/resources/:id',
+      path: '/organisations/:orgid/resources/create',
+      name: 'AddResource',
+      component: EditResource
+    },
+    {
+      path: '/organisations/:orgid/resources/:resid',
       name: 'Resource',
       component: Resource
     },
     {
-      path: '/resources/:id/edit',
+      path: '/organisations/:orgid/resources/:resid/edit',
       name: 'EditResource',
       component: EditResource
     },

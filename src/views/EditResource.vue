@@ -3,13 +3,13 @@
     <loader :loaded="!resourceLoading"></loader>
     <section>
       <div v-if="resource" class=" has-text-centered">
-                <div class="columns is-vcentered">
-                    <div class="column is-5">
+                <div class="columns is-vcentered  margin-1">
+                    <!-- <div class="column is-5"> -->
                       <!--TODO make Image Upload possible-->
-                        <figure class="image is-4by3">
-                            <img :src="getImageUrl" alt="Description">
-                        </figure>
-                    </div>
+                        <!-- <figure class="image is-4by3"> -->
+                            <!-- <img :src="getImageUrl" alt="Description"> -->
+                        <!-- </figure> -->
+                    <!-- </div> -->
                     <div class="column is-6 is-offset-1">
                       <div class="field">
                         <div class="control">
@@ -35,7 +35,7 @@
             <div class="margin-2"></div>
       <section>
         <div class="has-text-centered">
-          <button class="button is-primary" @click="addResource">
+          <button class="button is-primary" :class="{'is-loading':postLoading}" @click="addResource">
             Hinzufügen
           </button>
         </div>
@@ -55,7 +55,8 @@ export default {
       resourceid: {},
       create:false,
       loaded: false,
-      toggle:false
+      toggle:false,
+      postLoading:false
     }
   },
   created () {
@@ -74,19 +75,39 @@ export default {
       this.toggle=!this.toggle
       console.log(evt)
     },
+    redirectToResource(id,orgid){
+        this.$router.replace({ name: 'Resource', params: { resid:id, orgid:orgid}})
+    },
     addResource(){
-      if(validate(this.resource)){
-        resourceApi.postResource(this.resouce)
-        .then(resp => {
-          if(resp && resp.headers.Location){
-            this.$router.push({ name: 'Resource', params: { id:resp.headers.Location }})
-          }
-        })
-        .catch(err => {
-          console.error(err)
-        })
-      }else{
-        //TODO
+      if(this.validate(this.resource)){
+        this.postLoading=true
+        if(this.resource.id){
+          //Update Resource
+          resourceApi.updateResource(this.resource)
+          .then(resp => {
+            this.postLoading=false
+            this.redirectToResource(this.resource.id,this.resources.organisationId)
+          })
+          .catch(err => {
+            this.postLoading=false
+            console.error(err)
+          })
+        }else{
+          //Create Resource
+          resourceApi.postResource(this.resource)
+          .then(resp => {
+            this.postLoading=false
+            if(resp && resp.headers.location){
+              var id= resp.headers.location.substr(resp.headers.location.lastIndexOf('/') + 1)
+              this.redirectToResource(id,this.resources.organisationId)
+            }
+          })
+          .catch(err => {
+            this.postLoading=false
+            console.error(err)
+          })
+
+        }
       }
     },
     validate(res){
@@ -102,7 +123,7 @@ export default {
       return this.$store.getters.resource(this.resourceid)||{}
     },
     getImageUrl(){
-      return this.resource.main_picture_url || "https://cdn1.iconfinder.com/data/icons/camera-13/100/Artboard_62-512.png"
+      return this.resource.main_picture_url || "https://cdn1.iconfinder.com/data/icons/camera-13/100/Artboard_62-512.png"
     }
   }
 }

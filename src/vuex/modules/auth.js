@@ -20,8 +20,8 @@ const actions = {
     return new Promise((resolve,reject) =>{
       accountApi.syncAccount(idtoken)
       .then(response =>{
-          commit('usersResources', response.data.available_resources)
-          commit('usersOrganisations', response.data.associated_organisations)
+          commit('usersResources', response.data.availableResources)
+          commit('usersOrganisations', response.data.associatedOrganisations)
           resolve()
       })
       .catch(err =>{

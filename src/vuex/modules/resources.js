@@ -1,5 +1,6 @@
 import resourceApi from '../../api/resources'
 import accountApi from '../../api/account'
+import organisationsApi from '../../api/organisations'
 import Vue from 'vue'
 
 // initial state
@@ -68,6 +69,24 @@ const actions = {
         console.error(e)
         commit('usersResourcesLoading', false)
       })
+  },
+  loadResourcesForOrganisation({commit},orgid){
+    return new Promise((resolve,reject)=>{
+      organisationsApi.getResourcesForOrganisation(orgid)
+    .then(response=>{
+      if(response.data){
+        commit('resources',response.data)
+        resolve(response.data)
+      }else{
+        throw Error('No Responsedata')
+      }
+    }) 
+    .catch(err=>{
+      console.error(err)
+      reject(err)
+    })
+    })
+    
   }
 }
 
@@ -79,6 +98,11 @@ const getters = {
   },
   usersResources: state => {
    return state.usersResources
+  },
+  organisationResources: state =>{
+    return orgid =>{
+      return Object.values(state.resources).filter(res=> res.organisationId  ===orgid)
+    }
   }
 }
 

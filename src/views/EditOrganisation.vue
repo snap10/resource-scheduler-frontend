@@ -3,13 +3,13 @@
     <loader :loaded="!organisationLoading"></loader>
     <section>
       <div v-if="organisation" class=" has-text-centered">
-                <div class="columns is-vcentered">
-                    <div class="column is-5">
+                <div class="columns is-vcentered margin-1">
+                  <!-- <div class="column is-5"> -->
                       <!--TODO make Image Upload possible-->
-                        <figure class="image is-4by3">
-                            <img :src="getImageUrl" alt="Description">
-                        </figure>
-                    </div>
+                        <!-- <figure class="image is-4by3"> -->
+                            <!-- <img :src="getImageUrl" alt="Description"> -->
+                        <!-- </figure> -->
+                    <!-- </div> -->
                     <div class="column is-6 is-offset-1">
                       <div class="field">
                         <div class="control">
@@ -35,7 +35,7 @@
             <div class="margin-2"></div>
       <section>
         <div class="has-text-centered">
-          <button class="button is-primary" @click="addOrganisation">
+          <button class="button is-primary" :class="{'is-loading':postLoading}" @click="addOrganisation">
             Hinzufügen
           </button>
         </div>
@@ -53,12 +53,13 @@ export default {
     return {
       organisationid: null,
       create:false,
+      postLoading:false,
       loaded: false,
       toggle:false
     }
   },
   created () {
-    this.organisationid = this.$route.params.id
+    this.organisationid = this.$route.params.orgid
     if(this.organisationid)this.$store.dispatch('loadOrganisation',this.organisationid)
     else this.create=true
 
@@ -73,15 +74,23 @@ export default {
       this.toggle=!this.toggle
       console.log(evt)
     },
+     redirectToResource(id){
+        this.$router.replace({ name: 'Organisation', params: { orgid:id}})
+    },
     addOrganisation(){
-      if(validate(this.organisation)){
-        organisationApi.postOrganisation(this.resouce)
+      if(this.validate(this.organisation)){
+        this.postLoading=true
+        organisationApi.postOrganisation(this.organisation)
         .then(resp => {
-          if(resp && resp.headers.Location){
-            this.$router.push({ name: 'Organisation', params: { id:resp.headers.Location }})
+          this.postLoading=false
+          if(resp && resp.headers.location){
+            console.log(resp.headers.location)
+            var id= resp.headers.location.substr(resp.headers.location.lastIndexOf('/') + 1)
+            this.$router.push({ name: 'Organisation', params: { orgid:id}})
           }
         })
         .catch(err => {
+          this.postLoading=false
           console.error(err)
         })
       }else{
@@ -101,7 +110,7 @@ export default {
       return this.$store.getters.organisation(this.organisationid)||{}
     },
     getImageUrl(){
-      return this.organisation.main_picture_url || "https://cdn1.iconfinder.com/data/icons/camera-13/100/Artboard_62-512.png"
+      return this.organisation.main_picture_url || ""
     }
   }
 }

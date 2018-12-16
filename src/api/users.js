@@ -10,7 +10,7 @@ export default {
       return
     }
     //return client().get('account/user/' + id)
-    return new Promise((resolve,reject) =>{
+    return new Promise((resolve) =>{
       var response = {
        "data": {
         id: id,
@@ -33,7 +33,7 @@ export default {
       return
     }
     //return client().get(`accounts/user/${userid}/resources`)
-    return new Promise((resolve,reject) =>{
+    return new Promise((resolve) =>{
       var response = {
        "data": [{
         id: 1,
