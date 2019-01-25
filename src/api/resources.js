@@ -2,26 +2,14 @@ import client from '../utils/axiosUtils'
 
 export default {
   getResources() {
-    //return client().get(`resources`)
-    return new Promise((resolve,reject) =>{
-      var response = {
-       "data": Object.values(resources)
-     }
-      resolve(response)
-   })
+    return client().get(`resources/`)
   },
   getResource(resourceid) {
     if(!resourceid){
       console.error('resourceid hat not been provided')
       return
     }
-   //return client().get(`resources/${resourceid}`)
-   return new Promise((resolve,reject) =>{
-    var response = {
-     "data": resources[resourceid]
-   }
-    resolve(response)
- })
+   return client().get(`resources/${resourceid}`)
   },
   postResource(resource){
     if(!resource){

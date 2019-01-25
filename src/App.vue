@@ -2,7 +2,19 @@
   <div id="app">
       <my-nav  v-if="!(['Login','Register'].indexOf($route.name)>-1)"></my-nav>
       <loader :loaded="setupFinished"></loader>
-      <router-view v-if="setupFinished"  :key="$route.path" class="" :class="{'has-navbar-fixed-top':!(['Login','Register'].indexOf($route.name)>-1)}" id="content"></router-view>
+      <router-view v-if="setupFinished&&!globalError"  :key="$route.path" class="" :class="{'has-navbar-fixed-top':!(['Login','Register'].indexOf($route.name)>-1)}" id="content"></router-view>
+      <div v-if="globalError">
+        <section class="hero is-link is-fullheight">
+          <div class="hero-body">
+            <div class="container has-text-centered">
+              <p class="is-size-1">&#128543;</p>
+            <h1 class="title is-size-1 brand-name">DingTeiler Error</h1>
+            <h1 class="subtitle is-size-1 brand-name">Oops, something went wrong!</h1>
+            <p>{{globalError}}</p>
+            </div>
+          </div>
+        </section>
+      </div>
   </div>
 </template>
 
@@ -18,7 +30,10 @@ export default {
   },
   computed: {
     setupFinished(){
-      return this.$store.getters.keycloak.authenticated
+      return this.$store.getters.account.loaded
+    },
+    globalError(){
+      return this.$store.getters.globalError
     }
   }
 }

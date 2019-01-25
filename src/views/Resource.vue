@@ -1,10 +1,10 @@
 <template>
-  <div class="resource container">
+  <div class="resource container" @keyup.esc="closeEventCreation()" >
     <loader :loaded="!resourceLoading"></loader>
-    <div id="quickviewEventCreation" class="quickview">
+    <div id="quickviewEventCreation" class="quickview"  :class="{'is-active':creatEventQuickview.clicked}">
       <header class="quickview-header">
         <p class="title">Reservierung erstellen</p>
-        <a class="button is-danger" data-dismiss="quickview" @click="toggleEventCreation()"><i class="fas fa-times"></i></a>
+        <a class="button is-danger"  @click="toggleEventCreation()"><i class="fas fa-times"></i></a>
       </header>
       <div class="quickview-body">
         <div class="quickview-block">
@@ -41,7 +41,7 @@
       </div>
 
       <footer class="quickview-footer">
-          <a class="button is-danger" data-dismiss="quickview"><i class="fas fa-times"></i></a>
+          <a class="button is-danger" @click="toggleEventCreation()"><i class="fas fa-times"></i></a>
           <a class="button is-warning" @click="resetFutureEvent"><i class="fas fa-redo"></i></a>
           <a class="button is-success" :class="{'is-loading':postingEventPending}" :disabled="!futureEventValid" @click="saveFutureEvent">Speichern</a>
       </footer>
@@ -49,7 +49,7 @@
     <section>
       <div v-if="resource" class=" has-text-centered">
         <div class="columns is-vcentered">
-          <div class="column is-5">
+          <div v-if="resource.main_picture_url" class="column is-5">
             <figure class="image is-4by3">
               <img :src="resource.main_picture_url" alt="Description">
             </figure>
@@ -75,7 +75,7 @@
     <section class="margin-1">
       <div class="level">
         <h1 class="is-size-5">Reservierungen</h1>
-        <a class="button is-icon is-danger has-text-white" @click="toggleEventCreation()" data-show="quickview" data-target="quickviewEventCreation">
+        <a class="button is-icon is-danger has-text-white" @click="toggleEventCreation()">
               <i class="fas" :class="{'fa-times': false,'fa-plus':true}"/>&nbsp;Hinzufügen
         </a>
       </div>
@@ -99,15 +99,15 @@
               </div>
             </div>
             <div class="timeline-marker is-icon is-link has-text-white">
-              <p class="is-size-7">{{event.start_datetime | moment("DD")}}</p>
+              <p class="is-size-7">{{event.startDatetime | moment("DD")}}</p>
             </div>
             <div class="timeline-content box margin-1 is-paddingless">
               <div class="padding-1">
                 <p class="is-size-6">
-                  {{event.start_datetime | moment("calendar", null,{sameElse:"dddDoMMM,HH:mm"})}}
+                  {{event.startDatetime | moment("calendar", null,{sameElse:"dddDoMMM,HH:mm"})}}
                 </p>
                 <p class="is-size-6">
-                  bis {{event.end_datetime | moment("calendar", null,{sameElse:"dddDoMMM,HH:mm"})}}
+                  bis {{event.endDatetime | moment("calendar", null,{sameElse:"dddDoMMM,HH:mm"})}}
                 </p>
                 <h4 class="is-size-5">{{event.name}}</h4>
                 <p>{{event.description}}</p>
@@ -121,7 +121,6 @@
 </template>
 
 <script>
-  import bulmaQuickview from './../../node_modules/bulma-quickview/dist/js/bulma-quickview.min.js'
   import ResourceCard from './../components/Resource-Card.vue'
   import Loader from './../components/Loader.vue'
   export default {
@@ -135,7 +134,7 @@
         windowWidth: 1000,
         postingEventPending:false,
         quickviews: null,
-        resourceid: {},
+        resourceId: {},
         initialFutureEvent:{},
         futureEvent:{},
         creatEventQuickview: {
@@ -146,9 +145,10 @@
       }
     },
     created() {
-      this.resourceid = this.$route.params.id
-      this.$store.dispatch('loadResource', this.resourceid)
-      this.$store.dispatch('loadEvents', this.resourceid)
+      this.resourceId = this.$route.params.resid
+      this.organisationId = this.$route.params.orgid
+      this.$store.dispatch('loadResource', this.resourceId)
+      this.$store.dispatch('loadEvents', this.resourceId)
 
       Date.prototype.toDatetimeLocal =  function toDatetimeLocal() {
           var
@@ -166,12 +166,27 @@
         };
 
     },
+    mounted(){
+      window.addEventListener('keyup',event=>{if(event.key=='Escape')this.closeEventCreation()})
+      this.windowWidth = window.innerWidth
+      this.$nextTick(() => {
+      window.addEventListener('resize', () => {
+        this.windowWidth = window.innerWidth
+      });
+    })
+    },
     methods: {
       isGreaterThan(date1, date2) {
         return date1 > date2
       },
+      isGreaterThanOrEqual(date1, date2) {
+        return date1 >= date2
+      },
       toggleEventCreation() {
         this.creatEventQuickview.clicked = !this.creatEventQuickview.clicked || false
+      },
+      closeEventCreation() {
+        this.creatEventQuickview.clicked = false
       },
       toggleEvent(evt) {
         evt.clicked = !evt.clicked || false
@@ -189,15 +204,24 @@
         return false
       },
       saveFutureEvent(){
+        if(!this.futureEvent.withExactTime){
+          this.futureEvent.startDatetime=new Date(this.futureEvent.start_datetime).setHours(0,0,0,0)
+          this.futureEvent.endDatetime = new Date(this.futureEvent.end_datetime).setHours(23,59,59)
+        }else{
+           this.futureEvent.startDatetime=new Date(this.futureEvent.start_datetime)
+          this.futureEvent.endDatetime = new Date(this.futureEvent.end_datetime)
+        }
         if(this.futureEventValid){
+          console.log('Posting Reservation')
           this.postingEventPending=true
-          this.$store.dispatch('createEvent',{event:this.futureEvent,resourceid:this.resourceid})
+          this.$store.dispatch('createReservation',{reservation:this.futureEvent,resourceid:this.resourceId})
             .then(()=>{
               this.postingEventPending=false
             })
             .catch(()=>{this.postingEventPending=false})
+        }else{
+          console.log('TODO not Valid Event')
         }
-        console.log('TODO')
       },
       resetFutureEvent(){
        this.futureEvent={}
@@ -206,8 +230,6 @@
         var start_datetime = new Date(this.futureEvent.start_datetime)
         var end_datetime = new Date(start_datetime)
         end_datetime.setHours(start_datetime.getHours()+1,0,0,0)
-        console.log(end_datetime)
-        console.log(end_datetime.toDatetimeLocal())
         if(!this.futureEvent.end_datetime||this.isGreaterThan(new Date(this.futureEvent.start_datetime),new Date(this.futureEvent.end_datetime))){
           this.futureEvent.end_datetime = (this.futureEvent.withExactTime)? end_datetime.toDatetimeLocal():this.futureEvent.start_datetime
         }
@@ -221,24 +243,15 @@
           this.futureEvent.end_datetime_invalid  = (this.isGreaterThan(new Date(this.futureEvent.start_datetime),new Date(this.futureEvent.end_datetime)))?true:false
       }
     },
-    mounted(){
-      this.quickviews = bulmaQuickview.attach()
-      this.windowWidth = window.innerWidth
-      this.$nextTick(() => {
-      window.addEventListener('resize', () => {
-        this.windowWidth = window.innerWidth
-      });
-    })
-    },
     computed: {
       resourceLoading() {
         return this.$store.getters.resourceLoading || false
       },
       resource() {
-        return this.$store.getters.resource(this.resourceid) || {}
+        return this.$store.getters.resource(this.resourceId) || {}
       },
       events() {
-        return this.$store.getters.events(this.resourceid) || []
+        return this.$store.getters.events(this.resourceId) || []
       },
       eventsView() {
         var monthsInYear = {}
@@ -247,7 +260,7 @@
         this.events.forEach(evt => {
           var tmp = {}
           Object.assign(tmp, evt)
-          var startDate = new Date(evt.start_datetime)
+          var startDate = new Date(evt.startDatetime)
           tmp._year = startDate.getFullYear()
           if (years.indexOf(tmp._year) < 0) years.push(tmp._year)
           if (!monthsInYear[tmp._year]) monthsInYear[tmp._year] = []
@@ -267,15 +280,17 @@
       futureEventValid(){
         if(!this.futureEvent.name||this.futureEvent.name.length==0) return false
         if(!this.futureEvent.start_datetime||!this.futureEvent.end_datetime) return false
-        if(this.futureEvent.start_datetime_invalid||this.futureEvent.end_datetime_invalid) return false
+        if(!this.futureEventStartDateValid||!this.futureEventEndDateValid) return false
         return true
       },
       futureEventStartDateValid(){
             var now = (this.futureEvent.withExactTime)?new Date(): new Date().setHours(0,0,0,0)
-        return !(this.isGreaterThan(now,new Date(this.futureEvent.start_datetime)))
+            var greater = this.isGreaterThan(now,new Date(this.futureEvent.start_datetime))
+        return !greater
       },
       futureEventEndDateValid(){
-          return !(this.isGreaterThan(new Date(this.futureEvent.start_datetime),new Date(this.futureEvent.end_datetime)))
+        var greater =this.isGreaterThan(new Date(this.futureEvent.start_datetime),new Date(this.futureEvent.end_datetime))
+          return !greater
       }
     }
   }

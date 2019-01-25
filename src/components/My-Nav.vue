@@ -23,11 +23,11 @@
 
       <div id="nav-menu" v-bind:class="{ 'is-active': isActive }" class="navbar-menu" @click="navClick">
         <div class="navbar-start">
+        </div>
+        <div class="navbar-end">
           <router-link class="navbar-item" :to="'/organisations'">
             Your Organisations
           </router-link>
-        </div>
-        <div class="navbar-end">
           <router-link v-if="!isLoggedIn" class="navbar-item is-hoverable" @click="isActive = false" :to="'/login'">
             Login
           </router-link>
@@ -49,7 +49,7 @@
                 <router-link :to="'/profile'" class="navbar-item">
                   Profile
                 </router-link>
-                <a href="https://keycloak.auth.134.60.152.98.xip.io/auth/realms/dingteiler/account/" class="navbar-item">
+                <a href="https://apps.birk-home.de/auth/realms/dingteiler/account/" class="navbar-item">
                   Account
                 </a>
                 <router-link :to="'/settings'" class="navbar-item">

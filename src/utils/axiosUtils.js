@@ -3,6 +3,7 @@ import store from '../vuex/store'
 
 export default () => {
   var token  = store.getters.keycloak.authenticated ? `Bearer ${store.getters.keycloak.token}` : ''
+  if (store.getters.keycloak.isTokenExpired()) store.getters.keycloak.updateToken()
   const defaultOptions = {
     baseURL: `/api/`,
     headers: {

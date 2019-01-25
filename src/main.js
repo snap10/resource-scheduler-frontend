@@ -22,10 +22,11 @@ var keycloak = Keycloak('/keycloak.json');
           store.commit('setKeycloak',keycloak)
           store.dispatch('loadUserAccount',keycloak.idToken)
           .then(()=>{
-            
+            //console.log(keycloak.idTokenParsed)
           })
           .catch(() =>{
-            router.push('Error')
+            store.commit('globalError','Authentication Problem')
+            //router.push('Error')
           })
 
         }
@@ -33,6 +34,6 @@ var keycloak = Keycloak('/keycloak.json');
         
         return authenticated
     }).error(function() {
-      router.push('Error')
+      store.commit('globalError','Authentication Setup Problem')
       v.$mount('#app')
     });

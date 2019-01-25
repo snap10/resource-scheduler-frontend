@@ -3,7 +3,7 @@ import Vue from 'vue'
 import users from './modules/users'
 import auth from './modules/auth'
 import resources from './modules/resources'
-import events from './modules/events'
+import reservations from './modules/reservations'
 import organizations from './modules/organisations'
 
 const debug = process.env.NODE_ENV !== 'production'
@@ -14,7 +14,20 @@ export default new Vuex.Store({
     users,
     organizations,
     resources,
-    events
+    reservations
   },
-  strict: debug
+  strict: debug,
+  state:{
+    globalError:null
+  },
+  mutations:{
+    globalError(state,error){
+      state.globalError=error
+    }
+  },
+  getters:{
+    globalError: state => {
+        return state.globalError || null
+    }
+  }
 })

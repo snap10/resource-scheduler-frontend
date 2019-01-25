@@ -12,9 +12,32 @@
     </div>
     <div v-if="!organisationsEmpty">
         <div v-for="(organisation,index) in organisations" :key="index">
-          <div>
-            {{organisation}}
+          <router-link :to="{name:'Organisation', params:{orgid:organisation.id}}">
+          <div class="card">
+            <div v-if="organisation.picturePath" class="card-image">
+              <figure class="image is-4by3">
+                    <img :src="organisation.picturePath" alt="Image">
+              </figure>
+            </div>
+            <div class="card-content">
+              <div class="media">
+                <div class="media-content">
+                  <p class="title is-4">{{organisation.name}}</p>
+                  <p class="subtitle is-6">Verantwortlich: {{organisation.currentOwner||organisation.createdBy}}</p>
+                </div>
+                <div class="media-right">
+                  <a href="">
+                    <span class="is-invisible icon"><i class="fas fa-ellipsis-v has-text-grey"></i></span>
+                  </a>
+                </div>
+              </div>
+              <div class="content">
+                {{organisation.description}}
+              </div>
+            </div>
           </div>
+
+          </router-link>
         </div>
     </div>
   </div>

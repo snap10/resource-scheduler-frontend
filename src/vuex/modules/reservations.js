@@ -1,9 +1,10 @@
-import eventApi from '../../api/events'
+import reservationsAPI from '../../api/reservations'
 import Vue from 'vue'
 
 // initial state
 const state = {
-  events:{}
+  events:{},
+  currentEvent:null
 }
 
 // mutations
@@ -12,32 +13,37 @@ const mutations = {
     if (data.resourceid&&data.events) {
         Vue.set(state.events, data.resourceid, data.events)
     }
+  },
+  event(state,data){
+    if (data.resourceid&&data.event) {
+        state.currentEvent = data.event
+    }
   }
 }
 
 const actions = {
-  loadEvents({commit},resourceid){
-    eventApi.getEvents(resourceid)
+  loadEvents({commit},resourceid,before,after){
+     var p = reservationsAPI.getEvents(resourceid,before,after)
       .then(response => {
- 
         commit('events',{resourceid:resourceid,events:response.data})
       })
       .catch(e => {
         console.log('error loading events', e)
       })
+      return p
   },
   loadEvent({commit},resourceid,evtid){
-    eventApi.getEvent(evtid)
+    reservationsAPI.getEvent(resourceid,evtid)
     .then(response => {
-      commit('event', response.data)
+      commit('event', {resourceid:resourceid,event:response.data})
     })
     .catch(e => {
       console.log('error loading event', e)
     })
   },
-  createEvent({dispatch}, {event, resourceid}){
+  createReservation({dispatch}, {reservation, resourceid}){
     return new Promise((resolve,reject) => {
-      eventApi.postEvent(resourceid, event)
+      reservationsAPI.postReservation(resourceid, reservation)
       .then(() => {
         dispatch('loadEvents', resourceid)
         resolve()
@@ -55,6 +61,9 @@ const getters = {
     return resourceid => {
       return state.events[resourceid] || null
     }
+  },
+  currentEvent: state => {
+    return state.currentEvent;
   }
 }
 

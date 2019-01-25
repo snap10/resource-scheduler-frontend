@@ -52,7 +52,8 @@ export default {
   components: { ResourceCard, Loader },
   data () {
     return {
-      resourceid: {},
+      resourceId: {},
+      organisationId: {},
       create:false,
       loaded: false,
       toggle:false,
@@ -60,9 +61,13 @@ export default {
     }
   },
   created () {
-    this.resourceid = this.$route.params.id
-    if(this.resourceid)this.$store.dispatch('loadResource',this.resourceid)
-    else this.create=true
+    this.resourceId = this.$route.params.resid
+    this.organisationId = this.$route.params.orgid
+    if(this.resourceId)this.$store.dispatch('loadResource',this.resourceId)
+    else {
+        this.create=true
+        this.resource.organisationId=this.organisationId
+    }
 
   },
   methods:{
@@ -76,8 +81,8 @@ export default {
       console.log(evt)
     },
     redirectToResource(id,orgid){
-        this.$router.replace({ name: 'Resource', params: { resid:id, orgid:orgid}})
-    },
+      this.$router.replace({ name: 'Resource', params: { resid:id, orgid:orgid}})
+      },
     addResource(){
       if(this.validate(this.resource)){
         this.postLoading=true
@@ -86,7 +91,7 @@ export default {
           resourceApi.updateResource(this.resource)
           .then(resp => {
             this.postLoading=false
-            this.redirectToResource(this.resource.id,this.resources.organisationId)
+            this.redirectToResource(this.resource.id,this.resource.organisationId)
           })
           .catch(err => {
             this.postLoading=false
@@ -99,7 +104,7 @@ export default {
             this.postLoading=false
             if(resp && resp.headers.location){
               var id= resp.headers.location.substr(resp.headers.location.lastIndexOf('/') + 1)
-              this.redirectToResource(id,this.resources.organisationId)
+              this.redirectToResource(id,this.organisationId)
             }
           })
           .catch(err => {
@@ -112,6 +117,7 @@ export default {
     },
     validate(res){
        if(!res.name)return false
+       if(this.organisationId&&!res.organisationId)return false
        return true
     }
   },
@@ -120,7 +126,7 @@ export default {
       return this.$store.getters.resourceLoading||false
     },
     resource(){
-      return this.$store.getters.resource(this.resourceid)||{}
+      return this.$store.getters.resource(this.resourceId)||{}
     },
     getImageUrl(){
       return this.resource.main_picture_url || "https://cdn1.iconfinder.com/data/icons/camera-13/100/Artboard_62-512.png"

@@ -34,6 +34,11 @@ export default new Router({
       component: About
     },
     {
+      path: '/resources/:resid',
+      name: 'Resource',
+      component: Resource
+    },
+    {
       path: '/organisations',
       name: 'Organisations',
       component: Organisations
@@ -60,7 +65,7 @@ export default new Router({
     },
     {
       path: '/organisations/:orgid/resources/:resid',
-      name: 'Resource',
+      name: 'OrgResource',
       component: Resource
     },
     {

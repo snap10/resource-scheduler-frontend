@@ -1,6 +1,6 @@
 {
   "realm": "dingteiler",
-  "auth-server-url": "https://keycloak.auth.134.60.152.98.xip.io/auth",
+  "auth-server-url": "https://apps.birk-home.de/auth",
   "ssl-required": "external",
   "resource": "dingteiler",
   "public-client": true,

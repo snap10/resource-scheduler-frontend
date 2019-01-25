@@ -5,7 +5,6 @@ import Vue from 'vue'
 
 // initial state
 const state = {
-  usersResources: {},
   resources:{},
   usersResourcesLoading: false
 
@@ -17,7 +16,6 @@ const mutations = {
   resources(state,resources){
     if (resources) {
       resources.forEach(res => {
-        Vue.set(state.usersResources, res.id, res)
         Vue.set(state.resources, res.id, res)
 
       })
@@ -31,15 +29,6 @@ const mutations = {
   usersResourcesLoading(state,bool){
     state.usersResourcesLoading=bool
   },
-  usersResources(state,resources){
-    if (resources) {
-      resources.forEach(res => {
-        Vue.set(state.usersResources, res.id, res)
-      })
-    }else{
-      state.usersResources={}
-    }
-  }
 }
 
 const actions = {
@@ -52,7 +41,7 @@ const actions = {
       commit('resource', response.data)
     })
     .catch(e => {
-      console.log('error loading currentUser', e)
+      console.log('error loading resource', e)
     })
   },
   loadUsersResources({state,commit  }) {
@@ -61,7 +50,7 @@ const actions = {
       .then(response => {
         // JSON responses are automatically parsed.
         if (response.data) {
-          commit('usersResources', response.data)
+          commit('resources', response.data)
         }
         commit('usersResourcesLoading', false)
       })
@@ -96,12 +85,12 @@ const getters = {
       return state.resources[id] || null
     }
   },
-  usersResources: state => {
-   return state.usersResources
+  resources: state =>{
+    return state.resources||{}
   },
   organisationResources: state =>{
     return orgid =>{
-      return Object.values(state.resources).filter(res=> res.organisationId  ===orgid)
+      return Object.values(state.resources).filter(res=> res.organisationId===orgid)
     }
   }
 }

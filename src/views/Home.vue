@@ -16,9 +16,10 @@
     <div class="columns">
       <div class="column">
         <div class="is-flex flex-wrap">
-        <div class="resource-card" :key="index" v-for="(resource,index) in resources">
-          <router-link :to='`/organisations/${resource.organisationId}/resources/${resource.id}`'>
-            <resource-card :resource-for-card="resource"/>
+        <div class="resource-card" :key="index" v-for="(resource,index) in resourcesList">
+          <router-link v-if="resource" :to="resourceLink(resource)">
+          <!-- <router-link :to="{name: 'OrgResource', params: {resid: resource.id, orgid:resource.organisationId}}"> -->
+            <resource-card :resourceForCard="resource"/>
           </router-link>
         </div>
           
@@ -38,23 +39,32 @@ export default {
   data () {
     return {}
   },
-  created () {
-    //if(this.organisationsEmpty) this.$router.push('/organisations')
-  
+  mounted () {
+    if(this.$store.getters.account){
+      this.$store.getters.account.resourceIds.forEach(element => {
+        this.$store.dispatch('loadResource',element)
+      });
+    }
   },
   computed: {
-     organisationsEmpty(){
+      organisationsEmpty(){
         return this.organisations.length==0;
       },
       organisations(){
-          return this.$store.getters.usersOrganisations||[]
+          return this.$store.getters.organisations||[]
       },
-      resources(){
-          return this.$store.getters.usersResources||[]
+      resourcesList(){
+          return Object.values(this.$store.getters.resources)||[]
       },
       user() {
         return this.$store.getters.currentUser||{}
       }
+  },
+  methods: {
+    resourceLink(resource){
+       var link = (resource.organisationId)?{name: 'OrgResource', params: {resid: resource.id,orgid:resource.organisationId}}:{name:'Resource',params:{resid:resource.id}}
+       return link
+     },
   }
 }
 </script>
