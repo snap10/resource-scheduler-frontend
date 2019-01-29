@@ -1,7 +1,7 @@
 <template>
   <div id="app">
       <my-nav  v-if="!(['Login','Register'].indexOf($route.name)>-1)"></my-nav>
-      <loader :loaded="setupFinished"></loader>
+      <loader :loaded="setupFinished||globalError"></loader>
       <router-view v-if="setupFinished&&!globalError"  :key="$route.path" class="" :class="{'has-navbar-fixed-top':!(['Login','Register'].indexOf($route.name)>-1)}" id="content"></router-view>
       <div v-if="globalError">
         <section class="hero is-link is-fullheight">
@@ -30,7 +30,7 @@ export default {
   },
   computed: {
     setupFinished(){
-      return this.$store.getters.account.loaded
+      return this.$store.getters.account.loaded||['Login','Register','Welcome','AccountCreation'].indexOf(this.$route.name)>-1
     },
     globalError(){
       return this.$store.getters.globalError
@@ -40,7 +40,8 @@ export default {
 </script>
 
 <style>
-  .brand-name{
+
+.brand-name{
     font-family: "Comic Sans MS", cursive, sans-serif
   }
 fieldset, label { margin: 0; padding: 0; border:none; }
@@ -52,89 +53,5 @@ fieldset, label { margin: 0; padding: 0; border:none; }
 .has-navbar-fixed-top {
   padding-top: 3.25rem;
 }
-.is-half{
-  width: 50%;
-}
-.center {
-  left: auto;
-  right: auto;
-}
-.scrolly {
-  overflow-y: scroll;
-}
-.fullscreen{
-  height: calc(100vh - 3rem);
-  position: relative;
-}
-.scrollx {
-  overflow-x: scroll;
-}
-.noscrollx {
-  overflow-x: hidden;
-}
-.height-5{
-  height: 5rem;
-}
-.height-0{
-  height:0;
-}
-.height-1{
-  height: 1rem;
-}
-.height-100p{
-  height: 100%;
-}
-.height-20p{
-  height: 20%;
-}
-.height-75p{
-  height: 75%;
-}
-.no-left-margin {
-  margin-left: 0;
-}
-.ap-icon-clear {
-  display:none;
-}
-.margin-1 {
-    margin: 1rem;
-  }
-.margin-2 {
-    margin: 2rem;
-  }
-.margin-3{
-  margin:3rem;
-}
-.margin-bottom-2{
-  margin-bottom: 2rem;
-}
-.margin-bottom-1{
-  margin-bottom: 1rem;
-}
-.margin-top-3{
-  margin-top: 3rem;
-}
-.margin-top-2{
-  margin-top: 2rem;
-}
-.margin-top-1{
-  margin-top: 1rem;
-}
-.padding-1{
-  padding: 1rem
-}
-.transparent-black-10{
-      background-color: rgba(0,0,0,0.1)
-}
-.transparent-black-20{
-      background-color: rgba(0,0,0,0.2)
-}
-@media screen and (min-width: 769px) {
-.fixed-top-right{
-  position:fixed;
-  right: 0;
-  top: 3.25rem;
-}
 
-}
 </style>

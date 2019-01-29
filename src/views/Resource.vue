@@ -1,6 +1,11 @@
 <template>
-  <div class="resource container" @keyup.esc="closeEventCreation()" >
+<div class="has-background-light">
+
     <loader :loaded="!resourceLoading"></loader>
+
+  
+  <div class="resource container" @keyup.esc="closeEventCreation()" >
+    <div class="height-2"></div>
     <div id="quickviewEventCreation" class="quickview"  :class="{'is-active':creatEventQuickview.clicked}">
       <header class="quickview-header">
         <p class="title">Reservierung erstellen</p>
@@ -46,15 +51,11 @@
           <a class="button is-success" :class="{'is-loading':postingEventPending}" :disabled="!futureEventValid" @click="saveFutureEvent">Speichern</a>
       </footer>
     </div>
-    <section>
+    <section class="has-background-white">
       <div v-if="resource" class=" has-text-centered">
-        <div class="columns is-vcentered">
-          <div v-if="resource.main_picture_url" class="column is-5">
-            <figure class="image is-4by3">
-              <img :src="resource.main_picture_url" alt="Description">
-            </figure>
-          </div>
-          <div class="column is-6 is-offset-1">
+        <div class="columns">
+          
+          <div class="column">
             <h1 class="title is-2">
               {{resource.name}}
             </h1>
@@ -63,16 +64,21 @@
             </article>
 
           </div>
+          <div v-if="resource.picturePath" class="column">
+            <figure class="image is-4by3">
+              <img :src="resource.picturePath" alt="Description">
+            </figure>
+          </div>
         </div>
       </div>
     </section>
     <div class="margin-2"></div>
-    <section class="hero is-warning padding-1">
+    <section class="has-background-white padding-1">
       <h1 class="is-size-5">Details</h1>
       <div class="">TODO</div>
     </section>
     <div class="margin-2"></div>
-    <section class="margin-1">
+    <section class="has-background-white padding-1">
       <div class="level">
         <h1 class="is-size-5">Reservierungen</h1>
         <a class="button is-icon is-danger has-text-white" @click="toggleEventCreation()">
@@ -117,6 +123,9 @@
         </template>
       </div>
     </section>
+    <div class="height-2"></div>
+
+    </div>
   </div>
 </template>
 

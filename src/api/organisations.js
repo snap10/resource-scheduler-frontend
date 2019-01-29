@@ -1,19 +1,6 @@
 import client from '../utils/axiosUtils'
 var organisationsApi = ""//"organisationsapi/"
-var resources =[{
-  id: 1,
-  responsible_person: "Mustermann",
-  url: 'https://ffw-baltringen.de/images/stories/testslide/fzg2008.jpg',
-  name: 'Feuerwehrauto 1',
-  description: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.'
 
-}, {
-  id: 2,
-  responsible_person: "Musterfrau",
-  url: 'https://ffw-baltringen.de/images/stories/testslide/heim1.jpg',
-  name: 'Umkleideraum',
-  description: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.'
-}]
 export default {
   postOrganisation(org){
     if(!org){
@@ -21,6 +8,11 @@ export default {
     }
     return client().post(`${organisationsApi}organisations/`,org
     )
+  },
+  saveOrganisation(org){
+    if(!org)      return Promise.reject('Object not specified')
+    if(!org.id)      return Promise.reject('Object id not specified')
+    return client().put(`${organisationsApi}organisations/${org.id}`,org)
   },
   postResource(resource){
     if(!resource){
@@ -35,6 +27,33 @@ export default {
       return
     }
    return client().get(`${organisationsApi}organisations/${orgid}/resources/`)
+  },
+  getMembersForOrganisation(orgid) {
+    if (!orgid) {
+      console.error('id had not been provided')
+      return
+    }
+   return client().get(`${organisationsApi}organisations/${orgid}/members/`)
+  },
+  deleteMemberForOrganisation(orgid,memberid) {
+    if(!orgid)      return Promise.reject('Orgid not specified')
+    if(!memberid)      return Promise.reject('Member id id not specified')
+   return client().delete(`${organisationsApi}organisations/${orgid}/members/${memberid}`)
+  },
+  getJoinInvitations(orgid){
+    if(!orgid) return Promise.reject('Orgid is not specified')
+    return client().get(`${organisationsApi}organisations/${orgid}/joinInvitations/`)
+  },
+  inviteEmails(orgid,emails){
+    if(!orgid) return Promise.reject('Orgid is not specified')
+    if(!emails || emails.length==0) return Promise.reject('Emails Array is not present or empty')
+    return client().post(`${organisationsApi}organisations/${orgid}/joinInvitations`,emails)
+    
+  },
+  deleteJoinInvitationsForOrganisation(orgid,invid){
+    if(!orgid)      return Promise.reject('Orgid not specified')
+    if(!invid)      return Promise.reject('Member id id not specified')
+   return client().delete(`${organisationsApi}organisations/${orgid}/joinInvitations/${invid}`)
   },
   getOrganisation(orgid){
     if (!orgid) {

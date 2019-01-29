@@ -10,7 +10,7 @@ export default {
   getAccountOrganisations(){
     return client().get('account/organisations')
   },
-  syncAccount (idtoken) {
-    return client().post('account/',{idToken:idtoken})
+  syncAccount (idtoken,account) {
+    return client().post('account/',{idToken:idtoken,account:account})
   }
 }

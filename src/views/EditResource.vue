@@ -1,16 +1,20 @@
 <template>
+  <div class="has-background-light">
+        <div class="margin-2"></div>
+
   <div class="resource container">
     <loader :loaded="!resourceLoading"></loader>
-    <section>
+    <section class="has-background-white padding-1">
       <div v-if="resource" class=" has-text-centered">
-                <div class="columns is-vcentered  margin-1">
+        <h1 class="title">Ressource erstellen/bearbeiten</h1>
+                <div class="columns ">
                     <!-- <div class="column is-5"> -->
                       <!--TODO make Image Upload possible-->
                         <!-- <figure class="image is-4by3"> -->
                             <!-- <img :src="getImageUrl" alt="Description"> -->
                         <!-- </figure> -->
                     <!-- </div> -->
-                    <div class="column is-6 is-offset-1">
+                    <div class="column">
                       <div class="field">
                         <div class="control">
                           <input class="input" type="text" v-model="resource.name" placeholder="Titel"/>
@@ -27,20 +31,23 @@
                 </div>
             </div>
     </section>
-        <div class="margin-2"></div>
-    <section class="hero is-warning margin-1">
+        <div class="height-2"></div>
+    <section class="has-background-white padding-1">
       <h1 class="is-size-5">Details</h1>
       <div class="">TODO</div>
     </section>
-            <div class="margin-2"></div>
+            <div class="height-2"></div>
       <section>
         <div class="has-text-centered">
-          <button class="button is-primary" :class="{'is-loading':postLoading}" @click="addResource">
+          <button class="button is-link" :class="{'is-loading':postLoading}" @click="addResource">
             Hinzufügen
           </button>
         </div>
       </section>
+                  <div class="height-2"></div>
+
       </div>
+  </div>
 </template>
 
 <script>

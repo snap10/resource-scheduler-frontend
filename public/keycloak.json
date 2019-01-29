@@ -1,8 +1,0 @@
-{
-  "realm": "dingteiler",
-  "auth-server-url": "https://apps.birk-home.de/auth",
-  "ssl-required": "external",
-  "resource": "dingteiler",
-  "public-client": true,
-  "confidential-port": 0
-}

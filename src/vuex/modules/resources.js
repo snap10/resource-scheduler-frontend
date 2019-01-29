@@ -46,7 +46,7 @@ const actions = {
   },
   loadUsersResources({state,commit  }) {
     commit('usersResourcesLoading', true)
-    accountApi.getResourcesForUser(state.keycloak.idTokenParsed.sub)
+    accountApi.getResourcesForUser(state.user.sub)
       .then(response => {
         // JSON responses are automatically parsed.
         if (response.data) {
@@ -90,7 +90,7 @@ const getters = {
   },
   organisationResources: state =>{
     return orgid =>{
-      return Object.values(state.resources).filter(res=> res.organisationId===orgid)
+      return Object.values(state.resources).filter(res=>res.organisationId==orgid)
     }
   }
 }

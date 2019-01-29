@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import Router from 'vue-router'
+import VueRouter from 'vue-router'
 import Home from '@/views/Home.vue'
 import Login from '@/views/Login.vue'
 import Register from '@/views/Register.vue'
@@ -9,10 +9,14 @@ import Organisation from '@/views/Organisation.vue'
 import EditOrganisation from '@/views/EditOrganisation.vue'
 import Organisations from '@/views/Organisations.vue'
 import About from '@/views/About.vue'
+import Account from '@/views/Account.vue'
+import AccountCreation from '@/views/AccountCreation.vue'
+import Welcome from '@/views/Welcome.vue'
 import Error from '@/views/Error.vue'
-Vue.use(Router)
+import store from './../vuex/store'
+Vue.use(VueRouter)
 
-export default new Router({
+const router = new VueRouter({
   mode: 'history',
   routes: [
     {
@@ -34,9 +38,19 @@ export default new Router({
       component: About
     },
     {
+      path: '/resources/create',
+      name: 'AddPrivateResource',
+      component: EditResource
+    },
+    {
       path: '/resources/:resid',
       name: 'Resource',
       component: Resource
+    },
+    {
+      path: '/resources/:resid/edit',
+      name: 'EditPrivateResource',
+      component: EditResource
     },
     {
       path: '/organisations',
@@ -74,9 +88,36 @@ export default new Router({
       component: EditResource
     },
     {
+      path: '/welcome',
+      name: 'Welcome',
+      component: Welcome
+    },
+    {
+      path: '/account/creation',
+      name: 'AccountCreation',
+      component: AccountCreation
+    },
+    {
+      path:'/account',
+      name:'Account',
+      component:Account
+    },
+    {
       path: '*',
       name: 'Error',
       component: Error
     }
   ]
 })
+
+router.beforeEach((to, from, next) => {
+  if(['Login','Register','Welcome'].indexOf(to.name)>-1){
+    next()
+  }else if(!store.getters.isLoggedIn){
+    next({path:'/welcome'})
+  }else{
+    next()
+  }
+})
+
+export default router

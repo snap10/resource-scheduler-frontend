@@ -2,7 +2,7 @@
   <div id="my-nav">
     <nav class="navbar is-fixed-top is-link">
       <div class="navbar-brand">
-        <a class="is-white navbar-item" v-if="$route.path!='/'" @click="$router.back()">
+        <a class="is-white navbar-item" v-if="!(['Login','Register','Home','Welcome','AccountCreation'].indexOf($route.name)>-1)" @click="$router.back()">
           <span>
             <i class="fa fa-2x fa-arrow-left"></i>
           </span>
@@ -25,7 +25,7 @@
         <div class="navbar-start">
         </div>
         <div class="navbar-end">
-          <router-link class="navbar-item" :to="'/organisations'">
+          <router-link v-if="isLoggedIn" class="navbar-item" :to="'/organisations'">
             Your Organisations
           </router-link>
           <router-link v-if="!isLoggedIn" class="navbar-item is-hoverable" @click="isActive = false" :to="'/login'">
@@ -41,17 +41,14 @@
                 <img src="https://placehold.it/128x128">
               </figure>
               <p class="username">
-                {{user.preferred_username}}
+                {{user.username}}
               </p>
 
               <div class="navbar-dropdown">
 
-                <router-link :to="'/profile'" class="navbar-item">
-                  Profile
-                </router-link>
-                <a href="https://apps.birk-home.de/auth/realms/dingteiler/account/" class="navbar-item">
+                <router-link :to="'/account'" class="navbar-item">
                   Account
-                </a>
+                </router-link>
                 <router-link :to="'/settings'" class="navbar-item">
                   Settings
                 </router-link>
@@ -109,7 +106,7 @@
         return this.$store.getters.isLoggedIn
       },
       user() {
-        return this.$store.getters.currentUser || {}
+        return this.$store.getters.currentUser.user || {}
       }
 
     }
